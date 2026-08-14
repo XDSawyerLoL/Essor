@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type TrackKey = "tabac" | "alcool" | "cannabis" | "cocaine" | "sucre" | "viande";
 
@@ -36,6 +36,17 @@ type Profile = {
 
 type Profiles = Partial<Record<TrackKey, Profile>>;
 
+type PersonalProfile = {
+  firstName: string;
+  avatar: string;
+};
+
+type SecuritySettings = {
+  pinHash: string;
+  pinSalt: string;
+  discreet: boolean;
+};
+
 type CheckInStatus = "steady" | "hard" | "lapse";
 
 type CheckIn = {
@@ -51,6 +62,44 @@ const STORAGE_KEY = "essor:profiles:v2";
 const ACTIVE_KEY = "essor:active-track:v2";
 const CHECKINS_KEY = "essor:checkins:v2";
 const MILESTONES_KEY = "essor:milestones-seen:v2";
+const PERSONAL_KEY = "essor:personal-profile:v1";
+const SECURITY_KEY = "essor:security:v1";
+
+const AVATARS = [
+  { emoji: "🌱", label: "Pousse" },
+  { emoji: "🦊", label: "Renard" },
+  { emoji: "🐼", label: "Panda" },
+  { emoji: "🦁", label: "Lion" },
+  { emoji: "🐺", label: "Loup" },
+  { emoji: "🦋", label: "Papillon" },
+  { emoji: "🌙", label: "Lune" },
+  { emoji: "⭐", label: "Étoile" },
+];
+
+function makeSalt() {
+  if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
+    const values = new Uint32Array(4);
+    window.crypto.getRandomValues(values);
+    return Array.from(values, (value) => value.toString(16).padStart(8, "0")).join("");
+  }
+  return `${Date.now().toString(16)}-${Math.random().toString(16).slice(2)}`;
+}
+
+async function hashPin(pin: string, salt: string) {
+  const input = `${salt}:${pin}`;
+  if (typeof window !== "undefined" && window.crypto?.subtle) {
+    const bytes = new TextEncoder().encode(input);
+    const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+  }
+
+  let fallback = 2166136261;
+  for (let index = 0; index < input.length; index += 1) {
+    fallback ^= input.charCodeAt(index);
+    fallback = Math.imul(fallback, 16777619);
+  }
+  return `fallback-${(fallback >>> 0).toString(16)}`;
+}
 
 const TRACKS: Record<TrackKey, Track> = {
   tabac: {
@@ -310,7 +359,27 @@ export default function Home() {
   const [active, setActive] = useState<TrackKey>("tabac");
   const [profiles, setProfiles] = useState<Profiles>({});
   const [checkIns, setCheckIns] = useState<CheckIns>({});
+  const [personalProfile, setPersonalProfile] = useState<PersonalProfile | null>(null);
+  const [security, setSecurity] = useState<SecuritySettings | null>(null);
   const [ready, setReady] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [pinAttempt, setPinAttempt] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [failedPinAttempts, setFailedPinAttempts] = useState(0);
+  const [pinCooldownUntil, setPinCooldownUntil] = useState(0);
+  const [onboardingName, setOnboardingName] = useState("");
+  const [onboardingAvatar, setOnboardingAvatar] = useState(AVATARS[0].emoji);
+  const [onboardingPin, setOnboardingPin] = useState("");
+  const [onboardingPinConfirm, setOnboardingPinConfirm] = useState("");
+  const [onboardingDiscreet, setOnboardingDiscreet] = useState(false);
+  const [onboardingError, setOnboardingError] = useState("");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsName, setSettingsName] = useState("");
+  const [settingsAvatar, setSettingsAvatar] = useState(AVATARS[0].emoji);
+  const [settingsPin, setSettingsPin] = useState("");
+  const [settingsPinConfirm, setSettingsPinConfirm] = useState("");
+  const [settingsDiscreet, setSettingsDiscreet] = useState(false);
+  const [settingsError, setSettingsError] = useState("");
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
   const [startDate, setStartDate] = useState(localDate());
@@ -326,20 +395,89 @@ export default function Home() {
   const [pauseSeconds, setPauseSeconds] = useState(180);
   const [celebrating, setCelebrating] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const hiddenAt = useRef<number | null>(null);
+  const pinInput = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     try {
       const storedProfiles = window.localStorage.getItem(STORAGE_KEY);
       const storedActive = window.localStorage.getItem(ACTIVE_KEY) as TrackKey | null;
       const storedCheckIns = window.localStorage.getItem(CHECKINS_KEY);
+      const storedPersonalProfile = window.localStorage.getItem(PERSONAL_KEY);
+      const storedSecurity = window.localStorage.getItem(SECURITY_KEY);
+      // Local-only data is intentionally hydrated after the first client mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (storedProfiles) setProfiles(JSON.parse(storedProfiles));
       if (storedCheckIns) setCheckIns(JSON.parse(storedCheckIns));
       if (storedActive && TRACK_KEYS.includes(storedActive)) setActive(storedActive);
+      if (storedPersonalProfile) {
+        const parsedProfile = JSON.parse(storedPersonalProfile) as PersonalProfile;
+        if (parsedProfile.firstName && parsedProfile.avatar) {
+          setPersonalProfile(parsedProfile);
+          setOnboardingName(parsedProfile.firstName);
+          setOnboardingAvatar(parsedProfile.avatar);
+        }
+      }
+      if (storedSecurity) {
+        const parsedSecurity = JSON.parse(storedSecurity) as SecuritySettings;
+        if (parsedSecurity.pinHash && parsedSecurity.pinSalt) {
+          setSecurity({ ...parsedSecurity, discreet: Boolean(parsedSecurity.discreet) });
+          setOnboardingDiscreet(Boolean(parsedSecurity.discreet));
+          setLocked(true);
+        }
+      }
     } catch {
       // The experience remains usable if browser storage is unavailable.
     }
     setReady(true);
   }, []);
+
+  useEffect(() => {
+    const discreet = Boolean(security?.discreet);
+    document.title = discreet ? "Mon quotidien" : "ESSOR — L’application qui enlève le mauvais sort";
+    document.querySelector<HTMLLinkElement>('link[rel="manifest"]')?.setAttribute(
+      "href",
+      discreet ? "/manifest-discret.webmanifest" : "/manifest.webmanifest",
+    );
+    document.querySelectorAll<HTMLLinkElement>('link[rel="icon"], link[rel="apple-touch-icon"]').forEach((link) => {
+      link.href = discreet ? "/neutral-icon.svg" : "/favicon.svg";
+    });
+  }, [security?.discreet]);
+
+  useEffect(() => {
+    if (!security) return;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        hiddenAt.current = Date.now();
+        return;
+      }
+      if (hiddenAt.current && Date.now() - hiddenAt.current >= 15_000) {
+        setLocked(true);
+        setSettingsOpen(false);
+        setPauseOpen(false);
+        setPinAttempt("");
+      }
+      hiddenAt.current = null;
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, [security]);
+
+  useEffect(() => {
+    if (!locked) return;
+    const timer = window.setTimeout(() => pinInput.current?.focus(), 80);
+    return () => window.clearTimeout(timer);
+  }, [locked]);
+
+  useEffect(() => {
+    const needsOnboarding = ready && (!personalProfile || !security);
+    if (!settingsOpen && !locked && !needsOnboarding) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [locked, personalProfile, ready, security, settingsOpen]);
 
   useEffect(() => {
     if (!pauseOpen || !pauseRunning || pauseSeconds <= 0) return;
@@ -368,6 +506,8 @@ export default function Home() {
 
   useEffect(() => {
     const todayEntry = checkIns[active]?.[localDate()];
+    // The editor mirrors the saved entry whenever the selected journey changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCheckInStatus(todayEntry?.status ?? null);
     setCheckInUnits(String(todayEntry?.units || 1));
     setCheckInNote(todayEntry?.note ?? "");
@@ -380,7 +520,7 @@ export default function Home() {
   const reached = profile ? track.milestones.filter((item) => progress.hours >= item.hours) : [];
   const next = profile ? track.milestones.find((item) => progress.hours < item.hours) : undefined;
   const plantProgress = Math.min(1, progress.days / 90);
-  const activeCheckIns = checkIns[active] ?? {};
+  const activeCheckIns = useMemo(() => checkIns[active] ?? {}, [active, checkIns]);
   const sevenDays = recentDays(7);
   const stage = growthStage(progress.days);
   const unlockedRewards = REWARDS.filter((reward) => progress.days >= reward.days);
@@ -433,6 +573,147 @@ export default function Home() {
       window.localStorage.setItem(CHECKINS_KEY, JSON.stringify(nextCheckIns));
     } catch {
       // State still works for this session.
+    }
+  }
+
+  function persistPersonalProfile(nextProfile: PersonalProfile) {
+    setPersonalProfile(nextProfile);
+    try {
+      window.localStorage.setItem(PERSONAL_KEY, JSON.stringify(nextProfile));
+    } catch {
+      // State still works for this session.
+    }
+  }
+
+  function persistSecurity(nextSecurity: SecuritySettings) {
+    setSecurity(nextSecurity);
+    try {
+      window.localStorage.setItem(SECURITY_KEY, JSON.stringify(nextSecurity));
+    } catch {
+      // State still works for this session.
+    }
+  }
+
+  async function createPrivateSpace(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const firstName = onboardingName.trim();
+    if (!firstName) {
+      setOnboardingError("Indique le prénom que tu veux voir dans ton espace.");
+      return;
+    }
+    if (!/^\d{4}$/.test(onboardingPin)) {
+      setOnboardingError("Choisis un code composé de 4 chiffres.");
+      return;
+    }
+    if (onboardingPin !== onboardingPinConfirm) {
+      setOnboardingError("Les deux codes ne sont pas identiques.");
+      return;
+    }
+
+    const pinSalt = makeSalt();
+    const pinHash = await hashPin(onboardingPin, pinSalt);
+    persistPersonalProfile({ firstName: firstName.slice(0, 24), avatar: onboardingAvatar });
+    persistSecurity({ pinHash, pinSalt, discreet: onboardingDiscreet });
+    setOnboardingPin("");
+    setOnboardingPinConfirm("");
+    setOnboardingError("");
+    setLocked(false);
+    window.setTimeout(celebrate, 100);
+  }
+
+  async function unlockApp(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!security) return;
+    if (pinCooldownUntil > Date.now()) {
+      setPinError("Trop d’essais. Patiente encore quelques secondes.");
+      return;
+    }
+    if (!/^\d{4}$/.test(pinAttempt)) {
+      setPinError("Entre les 4 chiffres de ton code.");
+      return;
+    }
+
+    const candidate = await hashPin(pinAttempt, security.pinSalt);
+    if (candidate === security.pinHash) {
+      setLocked(false);
+      setPinAttempt("");
+      setPinError("");
+      setFailedPinAttempts(0);
+      return;
+    }
+
+    const nextFailures = failedPinAttempts + 1;
+    setFailedPinAttempts(nextFailures);
+    setPinAttempt("");
+    if (nextFailures >= 5) {
+      const cooldown = Date.now() + 30_000;
+      setPinCooldownUntil(cooldown);
+      setPinError("Cinq codes incorrects. Réessaie dans 30 secondes.");
+      window.setTimeout(() => {
+        setFailedPinAttempts(0);
+        setPinCooldownUntil(0);
+        setPinError("");
+      }, 30_000);
+    } else {
+      setPinError(`Code incorrect · ${5 - nextFailures} essai${5 - nextFailures > 1 ? "s" : ""} avant la pause.`);
+    }
+  }
+
+  function openPersonalSettings() {
+    if (!personalProfile || !security) return;
+    setSettingsName(personalProfile.firstName);
+    setSettingsAvatar(personalProfile.avatar);
+    setSettingsPin("");
+    setSettingsPinConfirm("");
+    setSettingsDiscreet(security.discreet);
+    setSettingsError("");
+    setSettingsOpen(true);
+  }
+
+  async function savePersonalSettings(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!security) return;
+    const firstName = settingsName.trim();
+    if (!firstName) {
+      setSettingsError("Ton prénom ne peut pas être vide.");
+      return;
+    }
+    if (settingsPin && !/^\d{4}$/.test(settingsPin)) {
+      setSettingsError("Le nouveau code doit contenir exactement 4 chiffres.");
+      return;
+    }
+    if (settingsPin !== settingsPinConfirm) {
+      setSettingsError("Les deux nouveaux codes ne sont pas identiques.");
+      return;
+    }
+
+    let nextSecurity = { ...security, discreet: settingsDiscreet };
+    if (settingsPin) {
+      const pinSalt = makeSalt();
+      nextSecurity = { ...nextSecurity, pinSalt, pinHash: await hashPin(settingsPin, pinSalt) };
+    }
+    persistPersonalProfile({ firstName: firstName.slice(0, 24), avatar: settingsAvatar });
+    persistSecurity(nextSecurity);
+    setSettingsOpen(false);
+    setSettingsError("");
+  }
+
+  function lockApp() {
+    setSettingsOpen(false);
+    setPauseOpen(false);
+    setPinAttempt("");
+    setPinError("");
+    setLocked(true);
+  }
+
+  function resetPrivateSpace() {
+    if (!window.confirm("Effacer définitivement ton profil, tes suivis et tes victoires sur cet appareil ? Cette action est irréversible.")) return;
+    try {
+      Object.keys(window.localStorage)
+        .filter((key) => key.startsWith("essor:"))
+        .forEach((key) => window.localStorage.removeItem(key));
+    } finally {
+      window.location.reload();
     }
   }
 
@@ -522,6 +803,131 @@ export default function Home() {
 
   if (!ready) return <main className="loading">ESSOR prépare ton espace…</main>;
 
+  if (locked && security) {
+    const discreet = security.discreet;
+    return (
+      <main className={discreet ? "privacy-shell discreet-lock" : "privacy-shell"}>
+        <section className="lock-card" aria-labelledby="lock-title">
+          <div className="privacy-tree lock-tree" aria-hidden="true">
+            <Plant progress={0.68} />
+            {!discreet && <span className="privacy-avatar">{personalProfile?.avatar ?? "🌱"}</span>}
+          </div>
+          <p className="privacy-kicker">{discreet ? "Mon quotidien" : "ESSOR · espace personnel"}</p>
+          <h1 id="lock-title">Ton espace est verrouillé.</h1>
+          <p>{discreet ? "Entre ton code pour retrouver ton espace." : "Entre ton code pour retrouver ton jardin et tes victoires."}</p>
+          <form onSubmit={unlockApp} noValidate>
+            <label className="pin-field">
+              <span>Code PIN</span>
+              <input
+                ref={pinInput}
+                type="password"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={4}
+                value={pinAttempt}
+                onChange={(event) => {
+                  setPinAttempt(event.target.value.replace(/\D/g, "").slice(0, 4));
+                  setPinError("");
+                }}
+                aria-describedby={pinError ? "pin-error" : undefined}
+              />
+            </label>
+            {pinError && <p className="form-error" id="pin-error" role="alert">{pinError}</p>}
+            <button className="button primary privacy-primary" type="submit">Ouvrir mon espace <span aria-hidden="true">→</span></button>
+          </form>
+          <button className="forgot-pin" type="button" onClick={resetPrivateSpace}>Code oublié ? Effacer mon espace local</button>
+          <p className="lock-footnote"><span aria-hidden="true">🔒</span> Le code protège des regards indiscrets. Le verrouillage du téléphone reste ta première protection.</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (!personalProfile || !security) {
+    return (
+      <main className="privacy-shell onboarding-shell">
+        <section className="onboarding-card" aria-labelledby="onboarding-title">
+          <div className="onboarding-heading">
+            <div className="privacy-tree onboarding-tree" aria-hidden="true"><Plant progress={0.58} /></div>
+            <div>
+              <p className="privacy-kicker">Ton espace, vraiment à toi</p>
+              <h1 id="onboarding-title">Bienvenue dans ton jardin privé.</h1>
+              <p>Un prénom, un avatar et un code PIN. Aucun compte externe, aucune donnée envoyée ailleurs.</p>
+            </div>
+          </div>
+
+          <form onSubmit={createPrivateSpace} noValidate>
+            <label className="field">
+              <span>Comment veux-tu qu’ESSOR t’appelle ?</span>
+              <input
+                value={onboardingName}
+                maxLength={24}
+                autoComplete="given-name"
+                onChange={(event) => setOnboardingName(event.target.value)}
+                placeholder="Ex. Marie"
+              />
+            </label>
+
+            <fieldset className="avatar-fieldset">
+              <legend>Choisis ton avatar</legend>
+              <div className="avatar-grid">
+                {AVATARS.map((avatar) => (
+                  <button
+                    className={onboardingAvatar === avatar.emoji ? "avatar-option selected" : "avatar-option"}
+                    type="button"
+                    key={avatar.label}
+                    onClick={() => setOnboardingAvatar(avatar.emoji)}
+                    aria-label={avatar.label}
+                    aria-pressed={onboardingAvatar === avatar.emoji}
+                  >
+                    {avatar.emoji}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <div className="form-row pin-row">
+              <label className="field">
+                <span>Crée un code à 4 chiffres</span>
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  autoComplete="new-password"
+                  maxLength={4}
+                  value={onboardingPin}
+                  onChange={(event) => setOnboardingPin(event.target.value.replace(/\D/g, "").slice(0, 4))}
+                  placeholder="••••"
+                />
+              </label>
+              <label className="field">
+                <span>Confirme ton code</span>
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  autoComplete="new-password"
+                  maxLength={4}
+                  value={onboardingPinConfirm}
+                  onChange={(event) => setOnboardingPinConfirm(event.target.value.replace(/\D/g, "").slice(0, 4))}
+                  placeholder="••••"
+                />
+              </label>
+            </div>
+
+            <label className="discreet-toggle">
+              <input type="checkbox" checked={onboardingDiscreet} onChange={(event) => setOnboardingDiscreet(event.target.checked)} />
+              <span className="toggle-track" aria-hidden="true"><i /></span>
+              <span><strong>Activer le mode discret</strong><small>« Mon quotidien » et une icône neutre lors de l’installation sur le téléphone.</small></span>
+            </label>
+
+            {Object.keys(profiles).length > 0 && <p className="legacy-note">✨ Tes suivis actuels sont conservés : tu ajoutes simplement une protection autour.</p>}
+            {onboardingError && <p className="form-error" role="alert">{onboardingError}</p>}
+            <button className="button primary privacy-primary" type="submit">Créer mon espace privé <span aria-hidden="true">🌱</span></button>
+            <p className="lock-footnote">Ton code n’est jamais stocké en clair. Si tu l’oublies, il faudra effacer les données locales et recommencer.</p>
+          </form>
+        </section>
+      </main>
+    );
+  }
+
   const showForm = !profile || editing;
   const accentStyle = { "--accent": track.accent, "--accent-soft": track.accentSoft } as React.CSSProperties;
 
@@ -550,7 +956,15 @@ export default function Home() {
           <span className="brand-emoji" aria-hidden="true">🌱</span>
           <span className="brand-name">ESSOR</span>
         </a>
-        <a className="help-link" href="#aide">Un coup de pouce <span aria-hidden="true">↓</span></a>
+        <div className="top-actions">
+          <button className="profile-chip" type="button" onClick={openPersonalSettings} aria-label="Ouvrir mon profil et mes réglages">
+            <span className="profile-avatar" aria-hidden="true">{personalProfile.avatar}</span>
+            <span>Bonjour <strong>{personalProfile.firstName}</strong> 👋</span>
+            <i aria-hidden="true">⚙</i>
+          </button>
+          <button className="top-lock" type="button" onClick={lockApp} aria-label="Verrouiller l’application maintenant">🔒</button>
+          <a className="help-link" href="#aide">Un coup de pouce <span aria-hidden="true">↓</span></a>
+        </div>
       </header>
 
       <section className={profile && !editing ? "intro compact" : "intro"} id="top">
@@ -791,6 +1205,75 @@ export default function Home() {
           <a href="https://www.drogues-info-service.fr/" target="_blank" rel="noreferrer">Drogues Info Service</a>.
         </p>
       </section>
+
+      {settingsOpen && (
+        <div className="settings-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false); }}>
+          <section className="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+            <button className="pause-close" type="button" onClick={() => setSettingsOpen(false)} aria-label="Fermer les réglages">×</button>
+            <p className="section-label">Mon espace privé</p>
+            <h2 id="settings-title">À ton image, sous ton code.</h2>
+            <p className="settings-intro">Ton profil et tes réglages restent uniquement sur cet appareil.</p>
+
+            <form onSubmit={savePersonalSettings} noValidate>
+              <div className="settings-profile-row">
+                <fieldset className="avatar-fieldset compact-avatars">
+                  <legend>Avatar</legend>
+                  <div className="avatar-grid">
+                    {AVATARS.map((avatar) => (
+                      <button
+                        className={settingsAvatar === avatar.emoji ? "avatar-option selected" : "avatar-option"}
+                        type="button"
+                        key={avatar.label}
+                        onClick={() => setSettingsAvatar(avatar.emoji)}
+                        aria-label={avatar.label}
+                        aria-pressed={settingsAvatar === avatar.emoji}
+                      >
+                        {avatar.emoji}
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
+                <label className="field settings-name">
+                  <span>Prénom affiché</span>
+                  <input value={settingsName} maxLength={24} onChange={(event) => setSettingsName(event.target.value)} />
+                </label>
+              </div>
+
+              <div className="settings-panel">
+                <div className="settings-panel-heading"><span aria-hidden="true">🔐</span><div><strong>Changer mon code PIN</strong><small>Laisse vide pour conserver ton code actuel.</small></div></div>
+                <div className="form-row pin-row">
+                  <label className="field">
+                    <span>Nouveau code</span>
+                    <input type="password" inputMode="numeric" autoComplete="new-password" maxLength={4} value={settingsPin} onChange={(event) => setSettingsPin(event.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="••••" />
+                  </label>
+                  <label className="field">
+                    <span>Confirmer</span>
+                    <input type="password" inputMode="numeric" autoComplete="new-password" maxLength={4} value={settingsPinConfirm} onChange={(event) => setSettingsPinConfirm(event.target.value.replace(/\D/g, "").slice(0, 4))} placeholder="••••" />
+                  </label>
+                </div>
+              </div>
+
+              <label className="discreet-toggle settings-discreet">
+                <input type="checkbox" checked={settingsDiscreet} onChange={(event) => setSettingsDiscreet(event.target.checked)} />
+                <span className="toggle-track" aria-hidden="true"><i /></span>
+                <span><strong>Mode discret</strong><small>Le titre devient « Mon quotidien » et l’installation utilise une icône neutre.</small></span>
+              </label>
+              <p className="install-note"><span aria-hidden="true">📱</span><span><strong>Pour une icône déjà installée</strong>Active ce mode, retire le raccourci existant puis ajoute de nouveau l’application à l’écran d’accueil. Si ton téléphone propose d’effacer les données du site, refuse.</span></p>
+
+              {settingsError && <p className="form-error" role="alert">{settingsError}</p>}
+              <div className="settings-actions">
+                <button className="button ghost" type="button" onClick={lockApp}>🔒 Verrouiller maintenant</button>
+                <button className="button primary" type="submit">Enregistrer <span aria-hidden="true">✓</span></button>
+              </div>
+            </form>
+
+            <div className="danger-zone">
+              <div><strong>Repartir de zéro</strong><span>Efface le profil, le code, les suivis et les victoires de cet appareil.</span></div>
+              <button className="delete-link" type="button" onClick={resetPrivateSpace}>Tout effacer</button>
+            </div>
+          </section>
+        </div>
+      )}
 
       {pauseOpen && (
         <div className="pause-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closePause(); }}>

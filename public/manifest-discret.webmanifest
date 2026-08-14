@@ -1,0 +1,19 @@
+{
+  "id": "/mon-quotidien",
+  "name": "Mon quotidien",
+  "short_name": "Quotidien",
+  "description": "Un espace personnel pour suivre mes habitudes au quotidien.",
+  "lang": "fr",
+  "start_url": "/?mode=discret",
+  "display": "standalone",
+  "background_color": "#15191e",
+  "theme_color": "#526577",
+  "icons": [
+    {
+      "src": "/neutral-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
