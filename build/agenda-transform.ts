@@ -9,6 +9,7 @@ function replaceOnce(source: string, needle: string, replacement: string, label:
 export function agendaTransform(): Plugin {
   return {
     name: "essor-agenda",
+    enforce: "pre",
     transform(code, id) {
       const normalized = id.replaceAll("\\", "/");
       if (!normalized.includes("/app/page.tsx")) return null;
