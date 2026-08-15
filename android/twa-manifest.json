@@ -1,7 +1,7 @@
 {
   "packageId": "com.xdsawyer.essor",
-  "host": "essor-app.valentin88hernandez.chatgpt.site",
-  "name": "ESSOR — Chaque jour reprend du terrain",
+  "host": "essor-app.fr",
+  "name": "ESSOR — Reprendre le contrôle",
   "launcherName": "ESSOR",
   "display": "fullscreen-sticky",
   "themeColor": "#15131D",
@@ -13,18 +13,18 @@
   "backgroundColor": "#15131D",
   "enableNotifications": true,
   "startUrl": "/?platform=android",
-  "iconUrl": "https://essor-app.valentin88hernandez.chatgpt.site/icon-512.png",
-  "maskableIconUrl": "https://essor-app.valentin88hernandez.chatgpt.site/icon-512.png",
+  "iconUrl": "https://essor-app.fr/icon-512.png",
+  "maskableIconUrl": "https://essor-app.fr/icon-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "./upload-keystore.jks",
     "alias": "essor-upload"
   },
-  "appVersion": "1.1.0",
-  "appVersionCode": 2,
+  "appVersion": "1.2.0",
+  "appVersionCode": 3,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://essor-app.valentin88hernandez.chatgpt.site/manifest.webmanifest",
+  "webManifestUrl": "https://essor-app.fr/manifest.webmanifest",
   "fallbackType": "customtabs",
   "features": {
     "playBilling": {
@@ -37,7 +37,7 @@
   "enableSiteSettingsShortcut": true,
   "isChromeOSOnly": false,
   "isMetaQuest": false,
-  "fullScopeUrl": "https://essor-app.valentin88hernandez.chatgpt.site/",
+  "fullScopeUrl": "https://essor-app.fr/",
   "minSdkVersion": 23,
   "orientation": "portrait",
   "fingerprints": [],
