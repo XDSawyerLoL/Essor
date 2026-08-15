@@ -1,0 +1,106 @@
+name: Publier ESSOR V2 sur GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "build/**"
+      - "worker/**"
+      - "public/**"
+      - "scripts/**"
+      - "vite.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".openai/**"
+      - ".github/workflows/publish-github-pages.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build ESSOR
+        run: npm run build
+
+      - name: Générer la version GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf docs
+          mkdir -p docs
+          cp -R dist/client/. docs/
+
+          node --input-type=module <<'NODE'
+          import { writeFile, readFile } from 'node:fs/promises';
+          const mod = await import('./dist/server/index.js');
+          const env = {
+            ASSETS: { fetch: async () => new Response('not found', { status: 404 }) },
+            DB: { prepare(){ throw new Error('DB not used for homepage render'); }, batch(){ throw new Error('DB not used for homepage render'); } },
+            IMAGES: { input(){ return { transform(){ return { output(){ return Promise.resolve({ response: () => new Response('', { status: 404 }) }); } }; } }; } },
+          };
+          const ctx = { waitUntil(){}, passThroughOnException(){} };
+          const response = await mod.default.fetch(new Request('https://xdsawyerlol.github.io/Essor/'), env, ctx);
+          if (!response.ok) throw new Error(`SSR status ${response.status}`);
+          let html = await response.text();
+          html = html
+            .replaceAll('/assets/', '/Essor/assets/')
+            .replaceAll('/workspace/sites/essor-app/.vinext/fonts/', '/Essor/assets/_vinext_fonts/')
+            .replaceAll('href="/favicon.svg"', 'href="/Essor/favicon.svg"')
+            .replaceAll('href="/manifest.webmanifest"', 'href="/Essor/manifest.webmanifest"');
+          await writeFile('docs/index.html', html);
+          await writeFile('docs/404.html', html);
+
+          for (const file of ['manifest.webmanifest', 'manifest-discret.webmanifest']) {
+            const path = `docs/${file}`;
+            try {
+              const manifest = JSON.parse(await readFile(path, 'utf8'));
+              manifest.start_url = '/Essor/';
+              manifest.scope = '/Essor/';
+              if (Array.isArray(manifest.icons)) {
+                manifest.icons = manifest.icons.map((icon) => ({ ...icon, src: String(icon.src || '').startsWith('/') ? `/Essor${icon.src}` : icon.src }));
+              }
+              await writeFile(path, JSON.stringify(manifest, null, 2));
+            } catch {}
+          }
+          NODE
+
+          find docs -type f -name '*.css' -print0 | xargs -0 sed -i 's#/workspace/sites/essor-app/.vinext/fonts/#/Essor/assets/_vinext_fonts/#g'
+          touch docs/.nojekyll
+
+      - name: Vérifier la page produite
+        run: |
+          grep -q 'ESSOR — Reprendre le contrôle' docs/index.html
+          grep -q '/Essor/assets/' docs/index.html
+          ! grep -q 'http-equiv="refresh"' docs/index.html
+          grep -R -q 'essor-api-bridge.vercel.app' docs/assets
+
+      - name: Publier docs sur main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs
+          if git diff --cached --quiet; then
+            echo "Aucun changement à publier."
+            exit 0
+          fi
+          git commit -m "Publie ESSOR V2 sur GitHub Pages"
+          git push origin HEAD:main
