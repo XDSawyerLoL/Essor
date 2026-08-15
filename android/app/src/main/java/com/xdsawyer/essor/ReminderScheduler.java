@@ -31,7 +31,7 @@ final class ReminderScheduler {
     static void cancel(Context context, String id) {
         if (!validId(id)) return;
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (manager != null) manager.cancel(pendingIntent(context, id, 0L, "medical"));
+        if (manager != null) manager.cancel(pendingIntent(context, id, 0L, 0L, "medical"));
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
                 .edit()
                 .remove(PREFIX + id)
@@ -82,7 +82,7 @@ final class ReminderScheduler {
 
         long trigger = normalizeFuture(triggerAt, repeatMs);
         if (trigger <= 0L) return;
-        PendingIntent pendingIntent = pendingIntent(context, id, repeatMs, kind);
+        PendingIntent pendingIntent = pendingIntent(context, id, trigger, repeatMs, kind);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (manager.canScheduleExactAlarms()) {
@@ -95,23 +95,30 @@ final class ReminderScheduler {
         }
     }
 
-    private static PendingIntent pendingIntent(Context context, String id, long repeatMs, String kind) {
+    private static PendingIntent pendingIntent(Context context, String id, long triggerAt, long repeatMs, String kind) {
         Intent intent = new Intent(context, ReminderReceiver.class)
                 .setAction(ACTION_REMINDER)
                 .setData(Uri.parse("essor://agenda/reminder/" + Uri.encode(id)))
                 .putExtra("id", id)
+                .putExtra("triggerAt", triggerAt)
                 .putExtra("repeat", repeatMs)
                 .putExtra("kind", kind);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
         return PendingIntent.getBroadcast(context, id.hashCode(), intent, flags);
     }
 
+    static long nextAfter(long triggerAt, long repeatMs, long now) {
+        if (repeatMs <= 0L) return 0L;
+        if (triggerAt > now + 1_000L) return triggerAt;
+        long steps = ((now - triggerAt) / repeatMs) + 1L;
+        return triggerAt + Math.max(1L, steps) * repeatMs;
+    }
+
     private static long normalizeFuture(long triggerAt, long repeatMs) {
         long now = System.currentTimeMillis();
         if (triggerAt > now + 1_000L) return triggerAt;
         if (repeatMs <= 0L) return 0L;
-        long steps = ((now - triggerAt) / repeatMs) + 1L;
-        return triggerAt + Math.max(1L, steps) * repeatMs;
+        return nextAfter(triggerAt, repeatMs, now);
     }
 
     static boolean validId(String id) {
