@@ -1,7 +1,7 @@
 {
-  "name": "ESSOR — Chaque jour reprend du terrain",
+  "name": "ESSOR — Reprendre le contrôle",
   "short_name": "ESSOR",
-  "description": "Un suivi personnel, simple et sans jugement, pour rendre chaque progrès visible.",
+  "description": "Un compagnon pour reprendre le contrôle d’une dépendance, d’une compulsion ou d’une habitude, un jour après l’autre.",
   "lang": "fr",
   "start_url": "/",
   "display": "fullscreen",
