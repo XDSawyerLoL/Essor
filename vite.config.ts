@@ -2,6 +2,7 @@ import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
 import { agendaTransform } from "./build/agenda-transform";
+import { communityAccess } from "./build/community-access-transform";
 import { essorV2 } from "./build/essor-v2-transform";
 import { growthV3 } from "./build/growth-v3-transform";
 import { pagesBridge } from "./build/pages-bridge-transform";
@@ -56,6 +57,7 @@ export default defineConfig(async () => {
       essorV2(),
       agendaTransform(),
       growthV3(),
+      communityAccess(),
       pagesBridge(),
       vinext(),
       sites(),
