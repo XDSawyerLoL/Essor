@@ -1,7 +1,8 @@
 import type { Plugin } from "vite";
 
 const API_ORIGIN = "https://essor-api-bridge.vercel.app";
-const PAGES_PUBLIC_URL = "https://xdsawyerlol.github.io/Essor/";
+const GITHUB_PUBLIC_URL = "https://xdsawyerlol.github.io/Essor/";
+const CUSTOM_HOST = "essor-app.fr";
 
 export function pagesBridge(): Plugin {
   return {
@@ -22,7 +23,7 @@ export function pagesBridge(): Plugin {
 
       source = source.replace(
         'const PLAY_BILLING_METHOD = "https://play.google.com/billing";',
-        `const ESSOR_IS_GITHUB_PAGES = typeof window !== "undefined" && window.location.hostname === "xdsawyerlol.github.io";\nconst ESSOR_API_ORIGIN = ESSOR_IS_GITHUB_PAGES ? "${API_ORIGIN}" : "";\nconst ESSOR_BASE_PATH = ESSOR_IS_GITHUB_PAGES ? "/Essor" : "";\nconst ESSOR_PUBLIC_URL = ESSOR_IS_GITHUB_PAGES ? "${PAGES_PUBLIC_URL}" : (typeof window !== "undefined" ? window.location.origin : "https://essor-app.valentin88hernandez.chatgpt.site");\nconst PLAY_BILLING_METHOD = "https://play.google.com/billing";`,
+        `const ESSOR_HOSTNAME = typeof window !== "undefined" ? window.location.hostname : "";\nconst ESSOR_IS_GITHUB_PAGES = ESSOR_HOSTNAME === "xdsawyerlol.github.io";\nconst ESSOR_IS_CUSTOM_DOMAIN = ESSOR_HOSTNAME === "${CUSTOM_HOST}" || ESSOR_HOSTNAME === "www.${CUSTOM_HOST}";\nconst ESSOR_IS_STATIC_HOST = ESSOR_IS_GITHUB_PAGES || ESSOR_IS_CUSTOM_DOMAIN;\nconst ESSOR_API_ORIGIN = ESSOR_IS_STATIC_HOST ? "${API_ORIGIN}" : "";\nconst ESSOR_BASE_PATH = ESSOR_IS_GITHUB_PAGES ? "/Essor" : "";\nconst ESSOR_PUBLIC_URL = ESSOR_IS_GITHUB_PAGES ? "${GITHUB_PUBLIC_URL}" : (ESSOR_IS_CUSTOM_DOMAIN ? (typeof window !== "undefined" ? window.location.origin + "/" : "https://${CUSTOM_HOST}/") : (typeof window !== "undefined" ? window.location.origin : "https://essor-app.valentin88hernandez.chatgpt.site"));\nconst PLAY_BILLING_METHOD = "https://play.google.com/billing";`,
       );
 
       source = source.replace(
