@@ -9,20 +9,32 @@ await cp(resolve("dist/client"), output, { recursive: true });
 const mod = await import(resolve("dist/server/index.js"));
 const env = {
   ASSETS: { fetch: async () => new Response("not found", { status: 404 }) },
-  DB: { prepare(){ throw new Error("DB not used for homepage render"); }, batch(){ throw new Error("DB not used for homepage render"); } },
+  DB: { prepare(){ throw new Error("DB not used for static render"); }, batch(){ throw new Error("DB not used for static render"); } },
   IMAGES: { input(){ return { transform(){ return { output(){ return Promise.resolve({ response: () => new Response("", { status: 404 }) }); } }; } }; } },
 };
 const ctx = { waitUntil(){}, passThroughOnException(){} };
-const response = await mod.default.fetch(new Request("https://essor-app.fr/"), env, ctx);
-if (!response.ok) throw new Error(`SSR status ${response.status}`);
-let html = await response.text();
-html = html
-  .replaceAll("/workspace/sites/essor-app/.vinext/fonts/", "/assets/_vinext_fonts/")
-  .replaceAll("https://xdsawyerlol.github.io/Essor/", "https://essor-app.fr/");
 
-if (!html.includes("ESSOR — Reprendre le contrôle")) throw new Error("Unexpected ESSOR title");
-await writeFile(resolve(output, "index.html"), html);
-await writeFile(resolve(output, "404.html"), html);
+function normalizeHtml(html) {
+  return html
+    .replaceAll("/workspace/sites/essor-app/.vinext/fonts/", "/assets/_vinext_fonts/")
+    .replaceAll("https://xdsawyerlol.github.io/Essor/", "https://essor-app.fr/");
+}
+
+async function renderRoute(route, destination, expectedText) {
+  const response = await mod.default.fetch(new Request(`https://essor-app.fr${route}`), env, ctx);
+  if (!response.ok) throw new Error(`SSR ${route} status ${response.status}`);
+  const html = normalizeHtml(await response.text());
+  if (expectedText && !html.includes(expectedText)) throw new Error(`Unexpected content for ${route}: ${expectedText}`);
+  const path = resolve(output, destination);
+  await mkdir(resolve(path, ".."), { recursive: true });
+  await writeFile(path, html);
+  return html;
+}
+
+const homeHtml = await renderRoute("/", "index.html", "ESSOR — Reprendre le contrôle");
+await writeFile(resolve(output, "404.html"), homeHtml);
+await renderRoute("/communaute", "communaute/index.html", "COMMUNAUTÉ ESSOR");
+await renderRoute("/confidentialite", "confidentialite/index.html", "Confidentialité");
 
 for (const file of ["manifest.webmanifest", "manifest-discret.webmanifest"]) {
   const path = resolve(output, file);
@@ -40,4 +52,4 @@ const assetlinks = resolve(output, ".well-known/assetlinks.json");
 const assetlinksText = await readFile(assetlinks, "utf8");
 if (!assetlinksText.includes("com.xdsawyer.essor")) throw new Error("assetlinks.json missing ESSOR package");
 
-console.log("Hostinger export ready:", output);
+console.log("Hostinger export ready:", output, "routes: /, /communaute, /confidentialite");
