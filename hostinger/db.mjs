@@ -5,10 +5,23 @@ import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
+function normalizeEnvValue(value) {
+  if (typeof value !== "string") return undefined;
+  let normalized = value.trim();
+  if (!normalized) return undefined;
+  if (
+    (normalized.startsWith('"') && normalized.endsWith('"')) ||
+    (normalized.startsWith("'") && normalized.endsWith("'"))
+  ) {
+    normalized = normalized.slice(1, -1).trim();
+  }
+  return normalized || undefined;
+}
+
 function firstEnv(...names) {
   for (const name of names) {
-    const value = process.env[name];
-    if (typeof value === "string" && value.trim()) return value.trim();
+    const value = normalizeEnvValue(process.env[name]);
+    if (value) return value;
   }
   return undefined;
 }
