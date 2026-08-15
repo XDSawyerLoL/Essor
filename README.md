@@ -10,9 +10,17 @@ ESSOR transforme les efforts quotidiens en progrès visibles : un arbre qui gran
 
 ## Ce que l’application propose
 
-- six parcours : tabac, alcool, cannabis, cocaïne, sucre et viande ;
+- douze parcours : tabac, alcool, cannabis, cocaïne, sucre, viande, jeux d’argent, écrans et réseaux sociaux, jeux vidéo, achats compulsifs, comportements sexuels compulsifs et dépendance affective ;
+- une navigation en cinq vues courtes : Aujourd’hui, Progrès, Journal, Comprendre et Aide ; Progrès est lui-même séparé en Jardin, Trophées et Repères ;
+- une navigation mobile réellement bord à bord, avec un mode Android immersif ;
+- un journal intime local chiffré par AES-GCM à partir du code PIN, avec migration automatique des anciennes pages ;
+- un Cercle ESSOR anonyme : messages encadrés, pseudonymes automatiques, gestes de soutien, retrait, signalement et suppression après 30 jours, sans messages privés ;
+- un compteur réel de présences anonymes pour rappeler que personne n’avance seul, sans prénom, parcours ou géolocalisation et avec suppression après 24 heures ;
+- une bibliothèque guidée sur la psychologie de l’addiction, le craving, la motivation, l’autopersuasion, les écarts et les relations ;
+- ESSOR+ avec 4 jours d’essai, un programme guidé de 30 jours et un accès fondateur privé pendant la validation Google Play ;
 - un compteur personnel avec estimations des unités évitées et de l’argent économisé ;
 - un arbre évolutif, des niveaux XP et six récompenses ;
+- des cartes de victoire et de médaille partageables sur les réseaux sociaux, avec le parcours masqué par défaut ;
 - un bilan quotidien sans remise à zéro punitive ;
 - des repères santé adaptés à chaque parcours ;
 - une pause guidée de trois minutes pour traverser une envie ;
@@ -20,7 +28,7 @@ ESSOR transforme les efforts quotidiens en progrès visibles : un arbre qui gran
 - un profil local avec prénom et avatar, sans compte externe ;
 - un verrouillage par code PIN à quatre chiffres à chaque ouverture ;
 - un mode discret avec un nom et une icône d’installation neutres ;
-- des données conservées uniquement dans le navigateur (localStorage).
+- des données de suivi conservées sur l’appareil ; seuls les signes volontairement publiés dans le Cercle et les états de facturation nécessaires sont traités côté serveur.
 
 ## Démarrage local
 
@@ -46,7 +54,7 @@ npm test
 - Next.js 16 via Vinext ;
 - Vite et Cloudflare Workers pour le rendu et l’hébergement ;
 - CSS natif pour l’identité visuelle et les animations ;
-- aucune base de données requise pour le MVP.
+- Cloudflare D1 pour les abonnements vérifiés, les signes temporaires du Cercle et le compteur anonyme de présence.
 
 ## Responsabilité
 
