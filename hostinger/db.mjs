@@ -5,6 +5,13 @@ import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
+// Identité MySQL confirmée dans hPanel pour cette application ESSOR.
+// Le mot de passe reste exclusivement dans les variables d'environnement Hostinger.
+const HOSTINGER_DB_HOST = "localhost";
+const HOSTINGER_DB_PORT = 3306;
+const HOSTINGER_DB_USER = "u316484636_essor";
+const HOSTINGER_DB_NAME = "u316484636_essor";
+
 function normalizeEnvValue(value) {
   if (typeof value !== "string") return undefined;
   let normalized = value.trim();
@@ -29,11 +36,12 @@ function firstEnv(...names) {
 export function databaseEnvState() {
   return {
     url: Boolean(firstEnv("DATABASE_URL", "MYSQL_URL")),
-    host: Boolean(firstEnv("DB_HOST", "MYSQL_HOST", "MYSQLHOST")),
-    port: Boolean(firstEnv("DB_PORT", "MYSQL_PORT", "MYSQLPORT")),
-    user: Boolean(firstEnv("DB_USER", "MYSQL_USER", "MYSQL_USERNAME", "MYSQLUSER")),
+    host: true,
+    port: true,
+    user: true,
     password: Boolean(firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW")),
-    name: Boolean(firstEnv("DB_NAME", "MYSQL_DATABASE", "MYSQL_DB", "MYSQLDATABASE")),
+    name: true,
+    identityPinned: true,
   };
 }
 
@@ -51,11 +59,11 @@ function poolConfig() {
   }
 
   return {
-    host: firstEnv("DB_HOST", "MYSQL_HOST", "MYSQLHOST") || "localhost",
-    port: Number(firstEnv("DB_PORT", "MYSQL_PORT", "MYSQLPORT") || 3306),
-    user: firstEnv("DB_USER", "MYSQL_USER", "MYSQL_USERNAME", "MYSQLUSER"),
+    host: HOSTINGER_DB_HOST,
+    port: HOSTINGER_DB_PORT,
+    user: HOSTINGER_DB_USER,
     password: firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW"),
-    database: firstEnv("DB_NAME", "MYSQL_DATABASE", "MYSQL_DB", "MYSQLDATABASE"),
+    database: HOSTINGER_DB_NAME,
     waitForConnections: true,
     connectionLimit: Number(firstEnv("DB_POOL_SIZE", "MYSQL_POOL_SIZE") || 10),
     queueLimit: 0,
@@ -69,7 +77,7 @@ let pool;
 export function db() {
   if (!pool) {
     const cfg = poolConfig();
-    if (!cfg.uri && (!cfg.user || !cfg.database)) {
+    if (!cfg.uri && !cfg.password) {
       throw new Error("mysql_not_configured");
     }
     pool = cfg.uri ? mysql.createPool(cfg.uri) : mysql.createPool(cfg);
