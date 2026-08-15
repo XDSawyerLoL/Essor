@@ -1,0 +1,68 @@
+name: ESSOR Hostinger CI
+
+on:
+  push:
+    branches: [hostinger-migration]
+    paths:
+      - "app/**"
+      - "build/**"
+      - "hostinger/**"
+      - "public/**"
+      - "scripts/**"
+      - "tests/**"
+      - "vite.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/hostinger-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Synchroniser package-lock
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Installer
+        run: npm ci --no-audit --no-fund
+
+      - name: Vérifier le runtime Hostinger
+        run: npm run check:hostinger
+
+      - name: Construire la version Hostinger
+        run: npm run build:hostinger
+
+      - name: Vérifier l’export
+        run: |
+          test -s hostinger-dist/public/index.html
+          test -s hostinger-dist/public/.well-known/assetlinks.json
+          grep -q 'ESSOR — Reprendre le contrôle' hostinger-dist/public/index.html
+          grep -q 'com.xdsawyer.essor' hostinger-dist/public/.well-known/assetlinks.json
+          ! grep -R -q 'xdsawyerlol.github.io/Essor' hostinger-dist/public/index.html
+
+      - name: Enregistrer package-lock si nécessaire
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
+            echo "package-lock déjà synchronisé"
+            exit 0
+          fi
+          git commit -m "Synchronise package-lock pour Hostinger"
+          git push origin HEAD:hostinger-migration
