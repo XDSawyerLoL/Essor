@@ -6,8 +6,9 @@ import { dirname, join } from "node:path";
 const here = dirname(fileURLToPath(import.meta.url));
 
 // Identité MySQL confirmée dans hPanel pour cette application ESSOR.
+// phpMyAdmin confirme que le compte actif est u316484636_essor@127.0.0.1.
 // Le mot de passe reste exclusivement dans DB_PASSWORD côté Hostinger.
-const HOSTINGER_DB_HOST = "localhost";
+const HOSTINGER_DB_HOST = "127.0.0.1";
 const HOSTINGER_DB_PORT = 3306;
 const HOSTINGER_DB_USER = "u316484636_essor";
 const HOSTINGER_DB_NAME = "u316484636_essor";
@@ -39,6 +40,7 @@ export function databaseEnvState() {
     name: true,
     identityPinned: true,
     passwordSource: "DB_PASSWORD",
+    hostMode: "127.0.0.1",
   };
 }
 
