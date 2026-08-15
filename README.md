@@ -2,9 +2,7 @@
 
 **L’application qui enlève le mauvais sort.**
 
-Application : **[ouvrir ESSOR](https://essor-app.valentin88hernandez.chatgpt.site)**
-
-Le dossier `docs` permet à GitHub Pages de rediriger vers cette version afin d’afficher exactement la même application.
+Application : **https://essor-app.fr**
 
 ESSOR transforme les efforts quotidiens en progrès visibles : un arbre qui grandit, des niveaux, des trophées à débloquer et des victoires à célébrer. L’expérience reste chaleureuse et ludique sans minimiser les difficultés liées à un changement d’habitude.
 
@@ -28,7 +26,7 @@ ESSOR transforme les efforts quotidiens en progrès visibles : un arbre qui gran
 - un profil local avec prénom et avatar, sans compte externe ;
 - un verrouillage par code PIN à quatre chiffres à chaque ouverture ;
 - un mode discret avec un nom et une icône d’installation neutres ;
-- des données de suivi conservées sur l’appareil ; seuls les signes volontairement publiés dans le Cercle et les états de facturation nécessaires sont traités côté serveur.
+- des données de suivi conservées sur l’appareil ; seuls les signes volontairement publiés dans le Cercle, les présences anonymisées et les états de facturation nécessaires sont traités côté serveur.
 
 ## Démarrage local
 
@@ -48,13 +46,25 @@ npm run build
 npm test
 ```
 
+## Production
+
+- domaine public : `https://essor-app.fr` ;
+- hébergement : Hostinger Business, Node.js / Express ;
+- base serveur : MySQL Hostinger ;
+- API et application servies en même origine ;
+- Stripe pour la facturation web ESSOR+ ;
+- Google Play Billing prévu pour la distribution Android ;
+- Trusted Web Activity Android : `com.xdsawyer.essor` ;
+- Digital Asset Links exposé sous `/.well-known/assetlinks.json`.
+
 ## Architecture
 
 - React 19 et TypeScript ;
 - Next.js 16 via Vinext ;
-- Vite et Cloudflare Workers pour le rendu et l’hébergement ;
-- CSS natif pour l’identité visuelle et les animations ;
-- Cloudflare D1 pour les abonnements vérifiés, les signes temporaires du Cercle et le compteur anonyme de présence.
+- Vite pour le build du frontend ;
+- Express pour le serveur de production ;
+- MySQL pour les abonnements, les publications anonymisées du Cercle, les soutiens, signalements et présences anonymes ;
+- stockage local du profil, du suivi et du journal chiffré.
 
 ## Responsabilité
 
