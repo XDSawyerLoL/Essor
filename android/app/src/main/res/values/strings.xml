@@ -15,28 +15,22 @@
      limitations under the License.
 -->
 <resources>
-  
-
   <!--
     The "fullscreen" and "fullscreen-sticky" TWA manifest values correspond to "immersive" and "sticky-immersive"
     AndroidManifest values.
   -->
-  
 
   <!--
-    This variable below expresses the relationship between the app and the site,
-    as documented in the TWA documentation at
-    https://developers.google.com/web/updates/2017/10/using-twa#set_up_digital_asset_links_in_an_android_app
-    and is injected into the AndroidManifest.xml
+    This variable expresses the relationship between the app and the public ESSOR origin.
+    It is injected into AndroidManifest.xml for Trusted Web Activity verification.
   -->
   <string name="assetStatements">
     [{
         \"relation\": [\"delegate_permission/common.handle_all_urls\"],
         \"target\": {
             \"namespace\": \"web\",
-            \"site\": \"https://essor-app.valentin88hernandez.chatgpt.site\"
+            \"site\": \"https://essor-app.fr\"
         }
     }]
-    
-  </string>  
+  </string>
 </resources>
