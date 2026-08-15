@@ -2,151 +2,166 @@
 
 État préparé le 15 août 2026 pour `com.xdsawyer.essor`.
 
-## Identité de l'application
+## Identité
 
 - Nom : **ESSOR — Reprendre le contrôle**
-- Nom court : **ESSOR**
-- Package Android : `com.xdsawyer.essor`
-- Version : `1.2.0`
-- Version code : `3`
+- Package : `com.xdsawyer.essor`
+- Version préparée : `1.2.0` / code `3`
 - Site : `https://essor-app.fr`
 - Politique de confidentialité : `https://essor-app.fr/confidentialite`
+- Règles UGC : `https://essor-app.fr/conditions-communaute`
 - Catégories Health Apps à déclarer :
   - **Mental and Behavioral Health / Santé mentale et comportementale** ;
-  - **Medication and Treatment Management / Gestion des médicaments et des traitements** pour les rappels de prises saisis par l'utilisateur.
+  - **Medication and Treatment Management / Gestion des médicaments et des traitements**.
 - ESSOR n'est pas un dispositif médical.
 
-## Description courte Play Store
+## Description courte
 
 **Reprends le contrôle de tes dépendances, compulsions et habitudes, un jour après l'autre.**
 
-## Description complète Play Store
+## Description complète — base
 
 **ESSOR t'aide à reprendre le contrôle, un jour après l'autre.**
 
-Alcool, nicotine, substances, sexualité compulsive, dépendance affective ou autre habitude difficile à maîtriser : ESSOR permet de suivre plusieurs parcours dans un même espace personnel, sans jugement et sans mise en scène.
+Alcool, nicotine, substances, sexualité compulsive, dépendance affective ou autre habitude difficile à maîtriser : ESSOR permet de suivre plusieurs parcours dans un même espace personnel.
 
-### Un suivi concret
+### Un compagnon, pas seulement un compteur
 
-- visualise le nombre de jours parcourus ;
-- réalise un bilan quotidien simple ;
-- suis ta progression, tes repères et tes trophées ;
-- utilise un journal personnel chiffré ;
-- consulte des ressources sur les dépendances, les mécanismes psychologiques et les stratégies de changement ;
-- utilise un agenda personnel pour rappeler des prises déjà prescrites, des rendez-vous médicaux et des activités sportives ;
-- partage certaines victoires lorsque tu le souhaites.
+- programme guidé jusqu'au **jour 90** : 30 jours d'installation puis 60 jours de consolidation ;
+- missions quotidiennes avec méthode, question de réflexion et source visible ;
+- compagnon anti-craving ;
+- bilans, déclencheurs, progression et trophées ;
+- journal personnel chiffré ;
+- bibliothèque documentée ;
+- agenda pour des médicaments déjà prescrits, rendez-vous médicaux et activités sportives ;
+- communauté gratuite : Signes anonymes et Histoires guidées.
 
-### Un agenda sans prescrire
+### Communauté ESSOR
 
-L'agenda ESSOR permet à l'utilisateur de saisir lui-même un traitement déjà prescrit, un rendez-vous ou une activité. ESSOR peut ensuite rappeler l'horaire choisi. L'application ne calcule pas de dose, ne modifie pas une ordonnance, ne décide pas de la fréquence d'un médicament et ne recommande aucun traitement.
+La communauté est gratuite et distincte de l'abonnement ESSOR+. Elle est réservée aux personnes qui confirment avoir 18 ans ou plus et exige l'acceptation des règles communautaires avant l'accès au contenu UGC.
 
-Les notifications Android sont volontairement génériques : le nom du médicament n'est pas affiché dans la notification. Les noms et notes de l'agenda restent dans le stockage local de l'appareil.
+Les **Signes** utilisent uniquement des phrases prédéfinies. Les **Histoires** suivent quatre champs courts : contexte, moment difficile, ce qui a aidé et message de transmission. Les utilisateurs disposent de commandes distinctes pour signaler un contenu et bloquer son auteur. Il n'existe pas de messagerie privée.
 
-### Rompre l'isolement sans exposer son identité
+Les coordonnées, liens, e-mails, numéros et identifiants sociaux sont refusés dans les Histoires. Les contenus peuvent être signalés et trois signalements distincts entraînent leur masquage automatique. Les auteurs peuvent retirer leurs propres publications.
 
-Le Cercle ESSOR permet d'envoyer des signes de soutien anonymes à partir de messages prédéfinis. Il n'y a ni messagerie privée, ni partage de coordonnées. Un indicateur de présence anonyme permet également de voir que d'autres personnes utilisent ESSOR au même moment, sans révéler leur identité ou leur parcours.
+### Agenda sans prescrire
+
+L'utilisateur saisit lui-même une consigne déjà prescrite, un rendez-vous ou une activité. ESSOR peut rappeler l'horaire choisi mais ne calcule aucune dose, ne modifie aucune ordonnance et ne recommande aucun traitement. Les notifications Android restent génériques et n'affichent pas le nom du médicament.
 
 ### Vie privée
 
-Le profil, les parcours, les bilans, la progression, l'agenda et le journal restent principalement sur l'appareil. Les pages libres du journal sont chiffrées localement. Les fonctions communautaires utilisent des identifiants aléatoires/pseudonymisés et sont conçues pour limiter les données transmises.
+Le profil, les parcours, bilans, progression, agenda et journal restent principalement sur l'appareil. Les pages libres du journal sont chiffrées localement. Les fonctions communautaires utilisent des identifiants aléatoires/pseudonymisés. Le blocage d'auteurs est enregistré localement sur l'appareil.
 
 Les fonctions d'aide et les numéros d'urgence restent accessibles indépendamment de l'abonnement.
 
 ### ESSOR+
 
-ESSOR+ permet d'accéder aux fonctions premium après une période d'essai de 4 jours. Les abonnements prévus sur Google Play sont mensuels ou annuels et peuvent être gérés depuis Google Play.
+ESSOR+ ouvre les fonctions premium après **4 jours d'essai**. La communauté de base n'est pas verrouillée par l'abonnement.
 
 ### Important — santé
 
-ESSOR est un outil de soutien, de suivi personnel, de rappel et de motivation dans le cadre des dépendances, compulsions et habitudes. **ESSOR n'est pas un dispositif médical et ne permet pas de diagnostiquer, traiter, guérir ou prévenir un problème de santé.** Pour tout conseil, diagnostic ou traitement médical, consulte un médecin ou un autre professionnel de santé qualifié.
+ESSOR est un outil de soutien, de suivi personnel, de rappel et de motivation. **ESSOR n'est pas un dispositif médical et ne permet pas de diagnostiquer, traiter, guérir ou prévenir un problème de santé.** Pour tout conseil, diagnostic ou traitement médical, consulte un professionnel de santé qualifié.
 
-Un rappel de médicament dans ESSOR sert uniquement à mémoriser une consigne déjà saisie par l'utilisateur. Il ne remplace pas une ordonnance ni l'avis d'un médecin ou d'un pharmacien.
+Un rappel de médicament ne remplace pas une ordonnance. Les Histoires communautaires sont des témoignages d'utilisateurs, pas des conseils médicaux.
 
-L'arrêt brutal de certaines consommations, notamment après une consommation importante et régulière d'alcool, peut présenter un risque médical. En cas d'urgence, utilise les services d'urgence indiqués dans l'application.
+L'arrêt brutal de certaines consommations, notamment après une consommation importante et régulière d'alcool, peut présenter un risque médical. En cas d'urgence, utiliser les services d'urgence indiqués dans l'application.
 
-## Abonnements Google Play à créer après validation du compte développeur
+## Abonnements Google Play
 
 ### Mensuel
-
 - Product ID : `essor_plus_monthly`
-- Prix cible France : **6,99 € / mois**
-- Essai gratuit : **4 jours**
+- France : **6,99 € / mois**
+- Essai : **4 jours**
 - Renouvellement automatique : oui
 
 ### Annuel
-
 - Product ID : `essor_plus_annual`
-- Prix cible France : **59,99 € / an**
-- Essai gratuit : **4 jours**
+- France : **59,99 € / an**
+- Essai : **4 jours**
 - Renouvellement automatique : oui
 
-Le backend n'accepte actuellement que ces deux Product IDs.
+Le backend n'accepte que ces deux Product IDs.
 
-## Déclaration Health Apps — brouillon
+## Health Apps — brouillon
 
-Sélections :
+- **Mental and Behavioral Health** : soutien, suivi personnel, documentation et outils de motivation relatifs aux dépendances et compulsions.
+- **Medication and Treatment Management** : agenda permettant à l'utilisateur de saisir et recevoir des rappels pour des prises déjà prescrites.
 
-- **Mental and Behavioral Health / Santé mentale et comportementale** : soutien, suivi personnel, documentation et outils de motivation relatifs aux dépendances et compulsions.
-- **Medication and Treatment Management / Gestion des médicaments et des traitements** : agenda permettant à l'utilisateur de saisir et recevoir des rappels pour des prises déjà prescrites.
+Ne pas déclarer ESSOR comme dispositif médical.
 
-Ne pas déclarer ESSOR comme dispositif médical : l'application ne réalise pas de diagnostic, ne prescrit pas de traitement et ne prétend pas prévenir ou guérir une pathologie.
+## UGC / communauté — checklist Play
 
-La description Play Store doit conserver l'avertissement médical ci-dessus et préciser que les rappels ne constituent pas une prescription.
+La version à envoyer doit conserver :
 
-## Data Safety — brouillon conservateur à vérifier dans la Play Console
+- contrôle d'âge avant accès à la communauté ;
+- acceptation non contournable des règles avant accès / publication ;
+- règles communautaires distinctes de la confidentialité ;
+- bouton **Signaler** sur les contenus d'autres utilisateurs ;
+- bouton **Bloquer** distinct sur les auteurs ;
+- possibilité de débloquer ;
+- retrait de ses propres publications ;
+- pas de messagerie privée ;
+- filtrage serveur des coordonnées courantes ;
+- masquage automatique après trois signalements distincts ;
+- limitations anti-spam ;
+- modération continue à prévoir opérationnellement après lancement.
 
-### Chiffrement et transport
+Répondre précisément au questionnaire de classification de contenu concernant le contenu généré par les utilisateurs.
 
-- Données transmises : HTTPS.
-- Journal personnel : contenu libre chiffré localement par AES-GCM ; clé dérivée du PIN avec PBKDF2.
-- PIN et clé du journal : non envoyés au serveur ESSOR.
+## Data Safety — brouillon conservateur
 
-### Données qui restent sur l'appareil
+### Local uniquement / principalement local
 
-Le prénom choisi, l'avatar, les parcours, les dates, bilans quotidiens, estimations, progression, réglages, contenu du journal et détails de l'agenda sont conçus pour rester localement sur l'appareil, sauf action distincte explicitement liée à une fonction serveur.
+- prénom et avatar ;
+- parcours, dates, bilans et progression ;
+- journal personnel chiffré AES-GCM ;
+- agenda et détails de médicaments/rendez-vous ;
+- PIN / clé du journal non transmis ;
+- acceptation des règles communautaires et contrôle d'âge local ;
+- liste pseudonyme des auteurs bloqués localement.
 
-Pour l'agenda :
+### Données communautaires transmises
 
-- nom du médicament : local uniquement ;
-- note personnelle / motif de rendez-vous : local uniquement ;
-- date, heure et répétition : local uniquement ;
-- sur Android, le planificateur natif conserve localement seulement un identifiant technique, l'heure du rappel, sa répétition et le type général (`medication`, `medical`, `sport`) ;
-- aucune donnée d'agenda n'est envoyée à l'API ESSOR.
+Pour Signes / Histoires / présence, ESSOR peut transmettre :
 
-### Données transmises pour le Cercle / présence
+- identifiant technique aléatoire puis empreinte pseudonyme ;
+- pseudonyme généré ;
+- phrase prédéfinie d'un Signe ;
+- quatre champs d'une Histoire publiés volontairement ;
+- étape générale et nombre de jours facultatif ;
+- réactions de soutien et signalements ;
+- présence anonyme temporaire.
 
-ESSOR peut transmettre :
+Finalités : fournir la communauté, la modération, la sécurité et le comptage anonyme. Pas de finalité publicitaire.
 
-- un identifiant aléatoire/pseudonyme technique ;
-- un message choisi dans une liste fermée ;
-- un nombre de jours facultatif ;
-- les actions de soutien et signalement ;
-- un identifiant de présence anonyme servant au comptage temporaire des personnes actives.
+### Conservation serveur
 
-Ces éléments sont utilisés pour la fonction communautaire, la modération et le comptage de présence. Ils ne doivent pas être utilisés à des fins publicitaires.
+- présence : jusqu'à 24 h ;
+- Signes : jusqu'à 30 jours ;
+- Histoires : jusqu'à 180 jours ;
+- interactions liées supprimées avec la publication via les clés étrangères ;
+- commandes de retrait disponibles dans l'application.
 
-### Abonnement / achats
+### Paiements
 
-ESSOR traite des identifiants techniques et l'état d'abonnement nécessaires à la vérification et à la restauration d'ESSOR+. Les données bancaires sont traitées par Google Play sur Android et ne sont pas stockées par ESSOR.
+ESSOR traite les identifiants techniques et l'état d'abonnement nécessaires à la vérification/restauration d'ESSOR+. Les données bancaires sont traitées par Google Play sur Android et ne sont pas stockées par ESSOR.
 
-### Publicité / vente
+### Publicité / vente / capteurs
 
-- Pas de publicité ciblée déclarée dans la version actuelle.
-- Pas de vente de données personnelles déclarée dans la version actuelle.
-- Pas de collecte de localisation, contacts, microphone ou caméra déclarée dans la version actuelle.
+- pas de publicité ciblée ;
+- pas de vente de données personnelles ;
+- pas de localisation, contacts, microphone ou caméra.
 
-**Attention :** la déclaration Data Safety finale doit être remplie à partir de la version effectivement envoyée à Google Play et des définitions exactes du formulaire Play Console. Ce brouillon sert de base factuelle, pas de validation automatique par Google.
+**La déclaration Data Safety finale doit être remplie à partir de l'AAB réellement envoyé et des définitions exactes affichées dans la Play Console.**
 
-## Permissions Android observées
+## Permissions Android
 
-- `POST_NOTIFICATIONS` : afficher les rappels choisis par l'utilisateur ;
-- `SCHEDULE_EXACT_ALARM` : permettre à l'utilisateur d'autoriser des rappels à heure précise. Si cet accès spécial n'est pas accordé, ESSOR utilise un rappel inexact de repli ;
-- `RECEIVE_BOOT_COMPLETED` : restaurer les rappels locaux après redémarrage de l'appareil ;
-- aucune permission de localisation, contacts, caméra ou microphone dans le manifeste Android préparé.
+- `POST_NOTIFICATIONS` : rappels choisis par l'utilisateur ;
+- `SCHEDULE_EXACT_ALARM` : rappels à heure précise ; repli inexact si refus ;
+- `RECEIVE_BOOT_COMPLETED` : restaurer les rappels après redémarrage ;
+- pas de localisation, contacts, caméra ou microphone.
 
-ESSOR n'utilise pas `USE_EXACT_ALARM`. L'accès « Alarmes et rappels » est demandé dans le contexte de la programmation d'un rappel et reste révocable par l'utilisateur.
-
-Play Billing est fourni via Google Android Browser Helper pour la Trusted Web Activity.
+ESSOR n'utilise pas `USE_EXACT_ALARM`.
 
 ## Digital Asset Links
 
@@ -158,27 +173,24 @@ Empreinte actuelle de la clé d'importation :
 
 `5E:F6:D1:6B:28:FE:B0:9B:A3:F8:BA:42:57:BE:09:B2:8A:1C:F7:2B:D0:F6:7E:A8:65:F6:0A:17:85:4C:27:A2`
 
-Après le premier téléversement avec Play App Signing, récupérer dans Play Console l'empreinte SHA-256 du **certificat de signature d'application** et l'ajouter à `public/.well-known/assetlinks.json` en plus de l'empreinte actuelle.
+Après le premier téléversement avec Play App Signing, ajouter également l'empreinte SHA-256 du certificat de **signature d'application** à `public/.well-known/assetlinks.json`.
 
-## Politique de confidentialité
+## Point administratif restant
 
-La page `/confidentialite` décrit désormais : stockage local, chiffrement du journal, agenda et rappels, Cercle, présence anonyme, abonnements, suppression et sécurité.
-
-Avant diffusion publique sur Google Play, il reste un élément administratif à renseigner sans l'inventer : **une adresse ou un mécanisme de contact confidentialité/support réellement opérationnel et les informations légales d'éditeur requises**. La page actuelle le signale explicitement.
+Avant diffusion commerciale, ajouter une adresse / un mécanisme de contact confidentialité-support réellement opérationnel ainsi que les informations juridiques requises de l'éditeur. Ne pas les inventer.
 
 ## Checklist après validation d'identité Google
 
-1. Créer/ouvrir l'application Play Console avec le package `com.xdsawyer.essor`.
-2. Activer Play App Signing et téléverser l'AAB sur le canal de test interne.
-3. Récupérer le SHA-256 de la clé de signature d'application et compléter `assetlinks.json`.
-4. Créer `essor_plus_monthly` et `essor_plus_annual` avec leurs offres et l'essai de 4 jours.
+1. Ouvrir/créer l'application Play Console `com.xdsawyer.essor`.
+2. Activer Play App Signing et téléverser l'AAB sur le test interne.
+3. Ajouter le SHA-256 de la clé de signature d'application à `assetlinks.json`.
+4. Créer les deux abonnements et l'essai de 4 jours.
 5. Ajouter les testeurs de licence.
-6. Remplir la déclaration Health Apps : **Mental and Behavioral Health** + **Medication and Treatment Management**.
-7. Justifier `SCHEDULE_EXACT_ALARM` par la fonctionnalité de rappels à heure précise et vérifier que la demande reste conforme aux règles Play au moment de la soumission.
-8. Remplir Data Safety à partir de la version réellement envoyée.
-9. Renseigner la politique de confidentialité publique et l'adresse de support.
-10. Tester sur Android 13+ l'autorisation de notifications et sur Android 12+ l'accès « Alarmes et rappels ».
-11. Tester un rappel médicament, un rendez-vous, un rappel sportif, une répétition quotidienne, une répétition hebdomadaire et la restauration après redémarrage.
-12. Effectuer un achat test Google Play et vérifier `/api/google-play/verify` avec un vrai purchase token.
-13. Vérifier la restauration d'achat, l'expiration/annulation et l'affichage plein écran TWA.
-14. Passer ensuite au test fermé/ouvert ou à la production selon les exigences du compte développeur.
+6. Remplir Health Apps.
+7. Remplir la déclaration UGC / classification de contenu et vérifier les règles communautaires dans l'AAB réellement testé.
+8. Remplir Data Safety.
+9. Renseigner support et informations légales.
+10. Tester notifications, rappels exacts/inexacts, redémarrage, communauté, signalement, blocage et déblocage.
+11. Effectuer un achat test Play et vérifier `/api/google-play/verify` avec un vrai purchase token.
+12. Vérifier restauration, annulation, expiration et plein écran TWA.
+13. Passer ensuite au canal exigé par le type de compte développeur.
