@@ -15,8 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
     steps:
       - name: Récupérer le projet
         uses: actions/checkout@v4
@@ -47,29 +45,67 @@ jobs:
           grep -q 'versionName "1.2.0"' app/build.gradle
           grep -q '"host": "essor-app.fr"' twa-manifest.json
 
+      - name: Détecter la signature Play
+        id: signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ] && [ -n "$ANDROID_KEYSTORE_PASSWORD" ] && [ -n "$ANDROID_KEY_ALIAS" ] && [ -n "$ANDROID_KEY_PASSWORD" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Signature Play absente : le workflow ne publiera aucun AAB prétendument prêt pour Google Play."
+          fi
+
       - name: Préparer la signature Play
-        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' }}
+        if: ${{ steps.signing.outputs.ready == 'true' }}
         working-directory: android
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > upload-keystore.jks
 
-      - name: Compiler APK debug, APK release et AAB
+      - name: Compiler APK debug
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Compiler APK release et AAB Play signés
+        if: ${{ steps.signing.outputs.ready == 'true' }}
         working-directory: android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/android/upload-keystore.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug assembleRelease bundleRelease --stacktrace
+        run: ./gradlew assembleRelease bundleRelease --stacktrace
 
-      - name: Publier les fichiers compilés
+      - name: Vérifier cryptographiquement l’AAB Play
+        if: ${{ steps.signing.outputs.ready == 'true' }}
+        run: |
+          set -euo pipefail
+          jarsigner -verify -verbose android/app/build/outputs/bundle/release/app-release.aab > /tmp/aab-signature.txt
+          grep -q "jar verified" /tmp/aab-signature.txt
+          echo "AAB signé et vérifié."
+
+      - name: Publier l’APK de test
         uses: actions/upload-artifact@v4
         with:
-          name: ESSOR-Android-1.2.0
+          name: ESSOR-Android-1.2.0-DEBUG
+          if-no-files-found: error
+          retention-days: 14
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publier les fichiers Google Play signés
+        if: ${{ steps.signing.outputs.ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESSOR-Android-1.2.0-PLAY-SIGNED
           if-no-files-found: error
           retention-days: 14
           path: |
-            android/app/build/outputs/apk/debug/app-debug.apk
             android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/app-release.aab
