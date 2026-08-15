@@ -1,0 +1,44 @@
+name: ESSOR web artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "build/**"
+      - "worker/**"
+      - "public/**"
+      - "scripts/**"
+      - "vite.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".openai/**"
+      - ".github/workflows/web-artifact.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.13.0"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESSOR-web-dist
+          retention-days: 7
+          if-no-files-found: error
+          path: dist/
