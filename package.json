@@ -8,7 +8,7 @@
   "scripts": {
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-    "build": "bash scripts/build-verified.sh && node scripts/export-hostinger.mjs && node scripts/patch-hostinger-runtime.mjs",
+    "build": "npm install --include=dev --no-audit --no-fund && bash scripts/build-verified.sh && node scripts/export-hostinger.mjs && node scripts/patch-hostinger-runtime.mjs",
     "build:hostinger": "npm run build",
     "build:cloudflare": "bash scripts/build-verified.sh",
     "start": "node hostinger/server.mjs",
