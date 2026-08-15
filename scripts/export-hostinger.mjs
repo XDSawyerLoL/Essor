@@ -34,6 +34,7 @@ async function renderRoute(route, destination, expectedText) {
 const homeHtml = await renderRoute("/", "index.html", "ESSOR — Reprendre le contrôle");
 await writeFile(resolve(output, "404.html"), homeHtml);
 await renderRoute("/communaute", "communaute/index.html", "COMMUNAUTÉ ESSOR");
+await renderRoute("/conditions-communaute", "conditions-communaute/index.html", "Conditions d’utilisation de la communauté");
 await renderRoute("/confidentialite", "confidentialite/index.html", "Confidentialité");
 
 for (const file of ["manifest.webmanifest", "manifest-discret.webmanifest"]) {
@@ -52,4 +53,4 @@ const assetlinks = resolve(output, ".well-known/assetlinks.json");
 const assetlinksText = await readFile(assetlinks, "utf8");
 if (!assetlinksText.includes("com.xdsawyer.essor")) throw new Error("assetlinks.json missing ESSOR package");
 
-console.log("Hostinger export ready:", output, "routes: /, /communaute, /confidentialite");
+console.log("Hostinger export ready:", output, "routes: /, /communaute, /conditions-communaute, /confidentialite");
