@@ -42,19 +42,57 @@ export function databaseEnvState() {
   };
 }
 
-function poolConfig() {
+function baseConnectionConfig() {
   return {
     host: HOSTINGER_DB_HOST,
     port: HOSTINGER_DB_PORT,
     user: HOSTINGER_DB_USER,
     password: dbPassword(),
+    timezone: "Z",
+    charset: "utf8mb4",
+  };
+}
+
+function poolConfig() {
+  return {
+    ...baseConnectionConfig(),
     database: HOSTINGER_DB_NAME,
     waitForConnections: true,
     connectionLimit: Number(normalizeEnvValue(process.env.DB_POOL_SIZE) || 10),
     queueLimit: 0,
-    timezone: "Z",
-    charset: "utf8mb4",
   };
+}
+
+function errorCode(error) {
+  return error?.code || error?.message || "database_unavailable";
+}
+
+export async function probeDatabaseAccess() {
+  const password = dbPassword();
+  if (!password) return { stage: "configuration", ok: false, code: "mysql_not_configured" };
+
+  let connection;
+  try {
+    connection = await mysql.createConnection(baseConnectionConfig());
+  } catch (error) {
+    return { stage: "authentication", ok: false, code: errorCode(error) };
+  }
+
+  try {
+    await connection.query("SELECT 1 AS ok");
+  } catch (error) {
+    return { stage: "authentication", ok: false, code: errorCode(error) };
+  }
+
+  try {
+    await connection.query(`USE \`${HOSTINGER_DB_NAME}\``);
+    await connection.query("SELECT 1 AS ok");
+    return { stage: "database_access", ok: true };
+  } catch (error) {
+    return { stage: "database_access", ok: false, code: errorCode(error) };
+  } finally {
+    await connection.end().catch(() => {});
+  }
 }
 
 let pool;
