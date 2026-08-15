@@ -31,9 +31,30 @@ export function agendaTransform(): Plugin {
 
       source = replaceOnce(
         source,
+        `const PRIVACY_NOTICE_VERSION = "2026-08-14";`,
+        `const PRIVACY_NOTICE_VERSION = "2026-08-15";`,
+        "version confidentialité",
+      );
+
+      source = replaceOnce(
+        source,
         `      const params = new URLSearchParams(window.location.search);\n      setIsAndroidApp(params.get("platform") === "android");`,
         `      const params = new URLSearchParams(window.location.search);\n      setIsAndroidApp(params.get("platform") === "android");\n      if (params.get("agenda") === "1") setAppView("agenda");`,
         "ouverture depuis un rappel",
+      );
+
+      source = replaceOnce(
+        source,
+        `    if (!window.confirm("Effacer définitivement ton profil, tes suivis, ton journal, tes victoires et tes signes du Cercle ? Ton abonnement Stripe ou Google Play, s’il existe, ne sera pas résilié.")) return;`,
+        `    if (!window.confirm("Effacer définitivement ton profil, tes suivis, ton agenda, ton journal, tes victoires et tes signes du Cercle ? Ton abonnement Stripe ou Google Play, s’il existe, ne sera pas résilié.")) return;`,
+        "confirmation Tout effacer",
+      );
+
+      source = replaceOnce(
+        source,
+        `    } finally {\n      window.location.reload();\n    }\n  }\n\n  function selectTrack`,
+        `    } finally {\n      if (isAndroidApp) window.location.assign("essor://agenda?op=cancel_all");\n      else window.location.reload();\n    }\n  }\n\n  function selectTrack`,
+        "effacement rappels Android",
       );
 
       source = replaceOnce(
@@ -48,6 +69,13 @@ export function agendaTransform(): Plugin {
         `      {hasPlusAccess && profile && !editing && appView === "learn" && (`,
         `      {hasPlusAccess && profile && !editing && appView === "agenda" && (\n        <Agenda isAndroidApp={isAndroidApp} firstName={personalProfile?.firstName ?? "toi"} />\n      )}\n\n      {hasPlusAccess && profile && !editing && appView === "learn" && (`,
         "vue Agenda",
+      );
+
+      source = replaceOnce(
+        source,
+        `              <article><span aria-hidden="true">💳</span><div><h3>Abonnement</h3><p>Stripe ou Google Play traite le paiement. ESSOR conserve seulement les identifiants et l’état nécessaires pour ouvrir, restaurer, gérer ou résilier ESSOR+. Aucune carte bancaire n’est stockée dans l’application.</p></div></article>`,
+        `              <article><span aria-hidden="true">💳</span><div><h3>Abonnement</h3><p>Stripe ou Google Play traite le paiement. ESSOR conserve seulement les identifiants et l’état nécessaires pour ouvrir, restaurer, gérer ou résilier ESSOR+. Aucune carte bancaire n’est stockée dans l’application.</p></div></article>\n              <article><span aria-hidden="true">📅</span><div><h3>Agenda local</h3><p>Les noms de médicaments, notes et motifs de rendez-vous restent sur cet appareil. Android ne conserve pour déclencher un rappel qu’un identifiant technique, l’horaire, la répétition et le type de rappel.</p></div></article>`,
+        "notice agenda",
       );
 
       return { code: source, map: null };
