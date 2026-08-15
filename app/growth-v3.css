@@ -17,6 +17,33 @@
 .community-chip:hover { color: #fff; border-color: rgba(86,224,194,.48); transform: translateY(-2px); }
 .community-chip span { font-size: 15px; }
 
+.adaptive-support {
+  margin: 0 0 11px;
+  padding: 13px 14px;
+  display: grid;
+  grid-template-columns: 35px 1fr auto;
+  gap: 11px;
+  align-items: center;
+  border: 1px solid rgba(242,191,85,.22);
+  border-radius: 15px;
+  background: linear-gradient(120deg,rgba(242,191,85,.075),rgba(159,122,234,.055));
+}
+.adaptive-support-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(242,191,85,.09);
+  font-size: 19px;
+}
+.adaptive-support div { min-width: 0; }
+.adaptive-support small { display:block;color:#b69e69;font-size:7.5px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px; }
+.adaptive-support strong { display:block;color:var(--ink);font-size:11px;line-height:1.3; }
+.adaptive-support p { margin:3px 0 0;color:var(--muted);font-size:8.5px;line-height:1.45; }
+.adaptive-support button { border:1px solid rgba(242,191,85,.22);border-radius:10px;padding:9px 11px;background:rgba(242,191,85,.1);color:var(--ink);font-size:8.5px;font-weight:850;white-space:nowrap;cursor:pointer; }
+.adaptive-support button:hover { border-color:rgba(242,191,85,.5); }
+
 .plus-community-free {
   margin: -4px 0 20px;
   padding: 15px 16px;
@@ -124,6 +151,8 @@
   .community-chip { width: 40px; padding: 0; justify-content: center; }
 }
 @media (max-width: 700px) {
+  .adaptive-support { grid-template-columns:35px 1fr; }
+  .adaptive-support button { grid-column:1/-1;width:100%; }
   .plus-community-free { grid-template-columns: 38px 1fr; }
   .plus-community-free .button { grid-column: 1 / -1; width: 100%; }
   .mission-method { grid-template-columns: 1fr; }
