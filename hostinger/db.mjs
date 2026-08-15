@@ -6,7 +6,7 @@ import { dirname, join } from "node:path";
 const here = dirname(fileURLToPath(import.meta.url));
 
 // Identité MySQL confirmée dans hPanel pour cette application ESSOR.
-// Le mot de passe reste exclusivement dans les variables d'environnement Hostinger.
+// Le mot de passe reste exclusivement dans DB_PASSWORD côté Hostinger.
 const HOSTINGER_DB_HOST = "localhost";
 const HOSTINGER_DB_PORT = 3306;
 const HOSTINGER_DB_USER = "u316484636_essor";
@@ -25,47 +25,32 @@ function normalizeEnvValue(value) {
   return normalized || undefined;
 }
 
-function firstEnv(...names) {
-  for (const name of names) {
-    const value = normalizeEnvValue(process.env[name]);
-    if (value) return value;
-  }
-  return undefined;
+function dbPassword() {
+  return normalizeEnvValue(process.env.DB_PASSWORD);
 }
 
 export function databaseEnvState() {
   return {
-    url: Boolean(firstEnv("DATABASE_URL", "MYSQL_URL")),
+    url: false,
     host: true,
     port: true,
     user: true,
-    password: Boolean(firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW")),
+    password: Boolean(dbPassword()),
     name: true,
     identityPinned: true,
+    passwordSource: "DB_PASSWORD",
   };
 }
 
 function poolConfig() {
-  const uri = firstEnv("DATABASE_URL", "MYSQL_URL");
-  if (uri) {
-    return {
-      uri,
-      waitForConnections: true,
-      connectionLimit: Number(firstEnv("DB_POOL_SIZE", "MYSQL_POOL_SIZE") || 10),
-      queueLimit: 0,
-      timezone: "Z",
-      charset: "utf8mb4",
-    };
-  }
-
   return {
     host: HOSTINGER_DB_HOST,
     port: HOSTINGER_DB_PORT,
     user: HOSTINGER_DB_USER,
-    password: firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW"),
+    password: dbPassword(),
     database: HOSTINGER_DB_NAME,
     waitForConnections: true,
-    connectionLimit: Number(firstEnv("DB_POOL_SIZE", "MYSQL_POOL_SIZE") || 10),
+    connectionLimit: Number(normalizeEnvValue(process.env.DB_POOL_SIZE) || 10),
     queueLimit: 0,
     timezone: "Z",
     charset: "utf8mb4",
@@ -77,10 +62,8 @@ let pool;
 export function db() {
   if (!pool) {
     const cfg = poolConfig();
-    if (!cfg.uri && !cfg.password) {
-      throw new Error("mysql_not_configured");
-    }
-    pool = cfg.uri ? mysql.createPool(cfg.uri) : mysql.createPool(cfg);
+    if (!cfg.password) throw new Error("mysql_not_configured");
+    pool = mysql.createPool(cfg);
   }
   return pool;
 }
