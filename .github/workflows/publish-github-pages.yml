@@ -58,7 +58,7 @@ jobs:
             IMAGES: { input(){ return { transform(){ return { output(){ return Promise.resolve({ response: () => new Response('', { status: 404 }) }); } }; } }; } },
           };
           const ctx = { waitUntil(){}, passThroughOnException(){} };
-          const response = await mod.default.fetch(new Request('https://xdsawyerlol.github.io/Essor/'), env, ctx);
+          const response = await mod.default.fetch(new Request('https://xdsawyerlol.github.io/'), env, ctx);
           if (!response.ok) throw new Error(`SSR status ${response.status}`);
           let html = await response.text();
           html = html
