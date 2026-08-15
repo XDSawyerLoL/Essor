@@ -1,6 +1,7 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
+import { essorV2 } from "./build/essor-v2-transform";
 import { sites } from "./build/sites-vite-plugin";
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
@@ -52,6 +53,7 @@ export default defineConfig(async () => {
         : {}),
     },
     plugins: [
+      essorV2(),
       vinext(),
       sites(),
       cloudflare({
