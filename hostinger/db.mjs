@@ -5,12 +5,32 @@ import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
+function firstEnv(...names) {
+  for (const name of names) {
+    const value = process.env[name];
+    if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  return undefined;
+}
+
+export function databaseEnvState() {
+  return {
+    url: Boolean(firstEnv("DATABASE_URL", "MYSQL_URL")),
+    host: Boolean(firstEnv("DB_HOST", "MYSQL_HOST", "MYSQLHOST")),
+    port: Boolean(firstEnv("DB_PORT", "MYSQL_PORT", "MYSQLPORT")),
+    user: Boolean(firstEnv("DB_USER", "MYSQL_USER", "MYSQL_USERNAME", "MYSQLUSER")),
+    password: Boolean(firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW")),
+    name: Boolean(firstEnv("DB_NAME", "MYSQL_DATABASE", "MYSQL_DB", "MYSQLDATABASE")),
+  };
+}
+
 function poolConfig() {
-  if (process.env.DATABASE_URL) {
+  const uri = firstEnv("DATABASE_URL", "MYSQL_URL");
+  if (uri) {
     return {
-      uri: process.env.DATABASE_URL,
+      uri,
       waitForConnections: true,
-      connectionLimit: Number(process.env.DB_POOL_SIZE || 10),
+      connectionLimit: Number(firstEnv("DB_POOL_SIZE", "MYSQL_POOL_SIZE") || 10),
       queueLimit: 0,
       timezone: "Z",
       charset: "utf8mb4",
@@ -18,13 +38,13 @@ function poolConfig() {
   }
 
   return {
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT || 3306),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: firstEnv("DB_HOST", "MYSQL_HOST", "MYSQLHOST") || "localhost",
+    port: Number(firstEnv("DB_PORT", "MYSQL_PORT", "MYSQLPORT") || 3306),
+    user: firstEnv("DB_USER", "MYSQL_USER", "MYSQL_USERNAME", "MYSQLUSER"),
+    password: firstEnv("DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASS", "MYSQL_PASSWORD_RAW"),
+    database: firstEnv("DB_NAME", "MYSQL_DATABASE", "MYSQL_DB", "MYSQLDATABASE"),
     waitForConnections: true,
-    connectionLimit: Number(process.env.DB_POOL_SIZE || 10),
+    connectionLimit: Number(firstEnv("DB_POOL_SIZE", "MYSQL_POOL_SIZE") || 10),
     queueLimit: 0,
     timezone: "Z",
     charset: "utf8mb4",
@@ -36,7 +56,7 @@ let pool;
 export function db() {
   if (!pool) {
     const cfg = poolConfig();
-    if (!process.env.DATABASE_URL && (!cfg.user || !cfg.database)) {
+    if (!cfg.uri && (!cfg.user || !cfg.database)) {
       throw new Error("mysql_not_configured");
     }
     pool = cfg.uri ? mysql.createPool(cfg.uri) : mysql.createPool(cfg);
