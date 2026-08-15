@@ -1,61 +1,27 @@
-# 🌱 ESSOR
+# ESSOR Android
 
-**L’application qui enlève le mauvais sort.**
+Application Android `com.xdsawyer.essor`, générée comme Trusted Web Activity et ciblant Android API 36.
 
-Application : **[ouvrir ESSOR](https://essor-app.valentin88hernandez.chatgpt.site)**
+## Facturation Google Play
 
-Le dossier `docs` permet à GitHub Pages de rediriger vers cette version afin d’afficher exactement la même application.
+La passerelle Google Play Billing est activée. Les deux abonnements attendus dans Play Console sont :
 
-ESSOR transforme les efforts quotidiens en progrès visibles : un arbre qui grandit, des niveaux, des trophées à débloquer et des victoires à célébrer. L’expérience reste chaleureuse et ludique sans minimiser les difficultés liées à un changement d’habitude.
+- `essor_plus_monthly` — 6,99 € par mois, essai gratuit de 4 jours ;
+- `essor_plus_annual` — 59,99 € par an, essai gratuit de 4 jours.
 
-## Ce que l’application propose
+La version Android ne redirige jamais vers Stripe. La version web continue d’utiliser Stripe.
 
-- douze parcours : tabac, alcool, cannabis, cocaïne, sucre, viande, jeux d’argent, écrans et réseaux sociaux, jeux vidéo, achats compulsifs, comportements sexuels compulsifs et dépendance affective ;
-- une navigation en cinq vues courtes : Aujourd’hui, Progrès, Journal, Comprendre et Aide ; Progrès est lui-même séparé en Jardin, Trophées et Repères ;
-- une navigation mobile réellement bord à bord, avec un mode Android immersif ;
-- un journal intime local chiffré par AES-GCM à partir du code PIN, avec migration automatique des anciennes pages ;
-- un Cercle ESSOR anonyme : messages encadrés, pseudonymes automatiques, gestes de soutien, retrait, signalement et suppression après 30 jours, sans messages privés ;
-- un compteur réel de présences anonymes pour rappeler que personne n’avance seul, sans prénom, parcours ou géolocalisation et avec suppression après 24 heures ;
-- une bibliothèque guidée sur la psychologie de l’addiction, le craving, la motivation, l’autopersuasion, les écarts et les relations ;
-- ESSOR+ avec 4 jours d’essai, un programme guidé de 30 jours et un accès fondateur privé pendant la validation Google Play ;
-- un compteur personnel avec estimations des unités évitées et de l’argent économisé ;
-- un arbre évolutif, des niveaux XP et six récompenses ;
-- des cartes de victoire et de médaille partageables sur les réseaux sociaux, avec le parcours masqué par défaut ;
-- un bilan quotidien sans remise à zéro punitive ;
-- des repères santé adaptés à chaque parcours ;
-- une pause guidée de trois minutes pour traverser une envie ;
-- des numéros d’aide officiels toujours accessibles ;
-- un profil local avec prénom et avatar, sans compte externe ;
-- un verrouillage par code PIN à quatre chiffres à chaque ouverture ;
-- un mode discret avec un nom et une icône d’installation neutres ;
-- des données de suivi conservées sur l’appareil ; seuls les signes volontairement publiés dans le Cercle et les états de facturation nécessaires sont traités côté serveur.
+La validation et l’acquittement des achats passent par `/api/google-play/verify`. Le secret Sites `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` doit contenir le JSON complet d’un compte de service autorisé dans Play Console ; sans lui, aucun abonnement Android n’est déverrouillé.
 
-## Démarrage local
+## Compilation GitHub Actions
 
-Prérequis : Node.js 22.13.0 ou supérieur.
+Le workflow `.github/workflows/android-build.yml` produit :
 
-```bash
-npm ci
-npm run dev
-```
+- un APK debug installable pour les essais ;
+- un AAB release, signé lorsque les quatre secrets GitHub suivants sont configurés : `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`.
 
-Puis ouvrir l’adresse indiquée par Vite.
+L’AAB définitif doit être signé avec une clé d’upload conservée durablement. Ne jamais committer cette clé ni ses mots de passe.
 
-## Vérifications
+## Publication Play Console
 
-```bash
-npm run build
-npm test
-```
-
-## Architecture
-
-- React 19 et TypeScript ;
-- Next.js 16 via Vinext ;
-- Vite et Cloudflare Workers pour le rendu et l’hébergement ;
-- CSS natif pour l’identité visuelle et les animations ;
-- Cloudflare D1 pour les abonnements vérifiés, les signes temporaires du Cercle et le compteur anonyme de présence.
-
-## Responsabilité
-
-ESSOR est un outil de soutien et de motivation, pas un dispositif médical. Les messages de sécurité et les coordonnées d’aide intégrés à l’application doivent rester visibles et exacts.
+Après la première mise en ligne, ajouter l’empreinte SHA-256 fournie par Play App Signing au fichier `public/.well-known/assetlinks.json`. Sans cette association, Android ouvre le site dans un onglet sécurisé au lieu du plein écran natif.
