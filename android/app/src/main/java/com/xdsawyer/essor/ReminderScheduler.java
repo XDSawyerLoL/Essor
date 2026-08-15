@@ -38,6 +38,20 @@ final class ReminderScheduler {
                 .apply();
     }
 
+    static void cancelAll(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        Map<String, ?> entries = preferences.getAll();
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (manager != null) {
+            for (String key : entries.keySet()) {
+                if (!key.startsWith(PREFIX)) continue;
+                String id = key.substring(PREFIX.length());
+                if (validId(id)) manager.cancel(pendingIntent(context, id, 0L, 0L, "medical"));
+            }
+        }
+        preferences.edit().clear().apply();
+    }
+
     static void markOneTimeComplete(Context context, String id) {
         if (!validId(id)) return;
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
