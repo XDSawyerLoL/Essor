@@ -51,7 +51,7 @@ jobs:
         working-directory: android
         run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > upload-keystore.jks
 
-      - name: Compiler APK et AAB
+      - name: Compiler APK debug, APK release et AAB
         working-directory: android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/android/upload-keystore.jks
@@ -60,7 +60,7 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug bundleRelease --stacktrace
+          ./gradlew assembleDebug assembleRelease bundleRelease --stacktrace
 
       - name: Publier les fichiers compilés
         uses: actions/upload-artifact@v4
@@ -70,4 +70,16 @@ jobs:
           retention-days: 14
           path: |
             android/app/build/outputs/apk/debug/app-debug.apk
+            android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Publier les outils de signature Android 36
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-signing-tools-36
+          if-no-files-found: error
+          retention-days: 2
+          path: |
+            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/apksigner
+            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/zipalign
+            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/lib/apksigner.jar
