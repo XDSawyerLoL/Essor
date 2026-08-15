@@ -1,3 +1,22 @@
+.community-chip {
+  min-height: 40px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(86,224,194,.2);
+  border-radius: 999px;
+  color: #bfeee2;
+  background: rgba(86,224,194,.065);
+  text-decoration: none;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: .2s ease;
+}
+.community-chip:hover { color: #fff; border-color: rgba(86,224,194,.48); transform: translateY(-2px); }
+.community-chip span { font-size: 15px; }
+
 .plus-community-free {
   margin: -4px 0 20px;
   padding: 15px 16px;
@@ -100,6 +119,10 @@
 }
 .program-card .stage-row > span { min-width: 92px; }
 
+@media (max-width: 900px) {
+  .community-chip b { display: none; }
+  .community-chip { width: 40px; padding: 0; justify-content: center; }
+}
 @media (max-width: 700px) {
   .plus-community-free { grid-template-columns: 38px 1fr; }
   .plus-community-free .button { grid-column: 1 / -1; width: 100%; }
