@@ -31,6 +31,12 @@ public class ReminderActivity extends Activity {
         }
 
         String operation = data.getQueryParameter("op");
+        if ("cancel_all".equals(operation)) {
+            ReminderScheduler.cancelAll(this);
+            reopenEssor();
+            return;
+        }
+
         String id = data.getQueryParameter("id");
         if (!ReminderScheduler.validId(id)) {
             finish();
@@ -97,6 +103,15 @@ public class ReminderActivity extends Activity {
 
         ReminderScheduler.rescheduleAll(this);
         Toast.makeText(this, "Rappel ESSOR programmé", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    private void reopenEssor() {
+        Intent openIntent = new Intent(this, LauncherActivity.class)
+                .setAction(Intent.ACTION_VIEW)
+                .setData(Uri.parse("https://essor-app.fr/?platform=android"))
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(openIntent);
         finish();
     }
 
