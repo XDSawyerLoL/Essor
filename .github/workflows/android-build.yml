@@ -3,7 +3,7 @@ name: Android APK et AAB
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, android-essor-app-fr]
     paths:
       - "android/**"
       - ".github/workflows/android-build.yml"
@@ -33,6 +33,19 @@ jobs:
       - name: Installer Android 36
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
 
+      - name: Préparer ESSOR 1.2.0 pour essor-app.fr
+        working-directory: android
+        run: |
+          set -euo pipefail
+          sed -i 's#essor-app.valentin88hernandez.chatgpt.site#essor-app.fr#g' app/build.gradle
+          sed -i 's#ESSOR — Chaque jour reprend du terrain#ESSOR — Reprendre le contrôle#g' app/build.gradle
+          sed -i 's#versionCode 2#versionCode 3#g' app/build.gradle
+          sed -i 's#versionName "1.1.0"#versionName "1.2.0"#g' app/build.gradle
+          ! grep -R "essor-app.valentin88hernandez.chatgpt.site" app twa-manifest.json
+          grep -q "hostName: 'essor-app.fr'" app/build.gradle
+          grep -q 'versionCode 3' app/build.gradle
+          grep -q 'versionName "1.2.0"' app/build.gradle
+
       - name: Préparer la signature Play
         if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' }}
         working-directory: android
@@ -52,7 +65,7 @@ jobs:
       - name: Publier les fichiers compilés
         uses: actions/upload-artifact@v4
         with:
-          name: ESSOR-Android
+          name: ESSOR-Android-1.2.0
           if-no-files-found: error
           retention-days: 14
           path: |
