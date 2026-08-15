@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du dépôt
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Remplacer par la source v16
@@ -20,8 +20,8 @@ jobs:
           set -euo pipefail
           archive="$RUNNER_TEMP/ESSOR-v16-source.tar.gz"
           cp ESSOR-v16-source.tar.gz "$archive"
-          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf -- {} +
-          tar -xzf "$archive" -C .
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github -exec rm -rf -- {} +
+          tar -xzf "$archive" -C . --exclude='.github' --exclude='.github/*'
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
