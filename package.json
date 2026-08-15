@@ -8,12 +8,13 @@
   "scripts": {
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-    "build": "bash scripts/build-verified.sh",
-    "build:hostinger": "bash scripts/build-verified.sh && node scripts/export-hostinger.mjs",
+    "build": "bash scripts/build-verified.sh && node scripts/export-hostinger.mjs",
+    "build:hostinger": "npm run build",
+    "build:cloudflare": "bash scripts/build-verified.sh",
     "start": "node hostinger/server.mjs",
     "start:cloudflare": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "check:hostinger": "node --check hostinger/server.mjs && node --check hostinger/db.mjs && node --check scripts/export-hostinger.mjs",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "npm run build:cloudflare && node --test tests/rendered-html.test.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern hostinger-dist",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
