@@ -42,6 +42,43 @@ CREATE TABLE IF NOT EXISTS essor_circle_reports (
   CONSTRAINT essor_circle_reports_post_fk FOREIGN KEY (post_id) REFERENCES essor_circle_posts(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS essor_stories (
+  id CHAR(36) PRIMARY KEY NOT NULL,
+  author_hash CHAR(64) NOT NULL,
+  alias VARCHAR(96) NOT NULL,
+  stage_key VARCHAR(24) NOT NULL,
+  context_text VARCHAR(500) NOT NULL,
+  hard_text VARCHAR(500) NOT NULL,
+  helped_text VARCHAR(500) NOT NULL,
+  message_text VARCHAR(500) NOT NULL,
+  days INT NULL,
+  created_at BIGINT NOT NULL,
+  KEY essor_stories_created_idx (created_at),
+  KEY essor_stories_stage_idx (stage_key, created_at),
+  KEY essor_stories_author_idx (author_hash, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS essor_story_reactions (
+  story_id CHAR(36) NOT NULL,
+  supporter_hash CHAR(64) NOT NULL,
+  reaction_key VARCHAR(24) NOT NULL,
+  created_at BIGINT NOT NULL,
+  PRIMARY KEY (story_id, supporter_hash),
+  KEY essor_story_reactions_story_idx (story_id),
+  KEY essor_story_reactions_supporter_idx (supporter_hash, created_at),
+  CONSTRAINT essor_story_reactions_story_fk FOREIGN KEY (story_id) REFERENCES essor_stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS essor_story_reports (
+  story_id CHAR(36) NOT NULL,
+  reporter_hash CHAR(64) NOT NULL,
+  created_at BIGINT NOT NULL,
+  PRIMARY KEY (story_id, reporter_hash),
+  KEY essor_story_reports_story_idx (story_id),
+  KEY essor_story_reports_reporter_idx (reporter_hash, created_at),
+  CONSTRAINT essor_story_reports_story_fk FOREIGN KEY (story_id) REFERENCES essor_stories(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS essor_presence (
   session_hash CHAR(64) PRIMARY KEY NOT NULL,
   last_seen BIGINT NOT NULL,
