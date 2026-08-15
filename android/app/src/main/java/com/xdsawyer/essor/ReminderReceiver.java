@@ -18,6 +18,7 @@ public class ReminderReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String id = intent.getStringExtra("id");
+        long scheduledAt = intent.getLongExtra("triggerAt", System.currentTimeMillis());
         long repeatMs = Math.max(0L, intent.getLongExtra("repeat", 0L));
         String kind = intent.getStringExtra("kind");
         if (!ReminderScheduler.validId(id)) return;
@@ -26,13 +27,8 @@ public class ReminderReceiver extends BroadcastReceiver {
         showNotification(context, id, kind);
 
         if (repeatMs > 0L) {
-            ReminderScheduler.saveAndSchedule(
-                    context,
-                    id,
-                    System.currentTimeMillis() + repeatMs,
-                    repeatMs,
-                    kind
-            );
+            long next = ReminderScheduler.nextAfter(scheduledAt + repeatMs, repeatMs, System.currentTimeMillis());
+            ReminderScheduler.saveAndSchedule(context, id, next, repeatMs, kind);
         } else {
             ReminderScheduler.markOneTimeComplete(context, id);
         }
