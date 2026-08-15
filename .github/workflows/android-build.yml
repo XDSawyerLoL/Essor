@@ -62,6 +62,16 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug assembleRelease bundleRelease --stacktrace
 
+      - name: Copier les outils de signature
+        run: |
+          set -euo pipefail
+          mkdir -p android-signing-tools/lib
+          cp "$ANDROID_HOME/build-tools/36.0.0/apksigner" android-signing-tools/
+          cp "$ANDROID_HOME/build-tools/36.0.0/zipalign" android-signing-tools/
+          cp "$ANDROID_HOME/build-tools/36.0.0/lib/apksigner.jar" android-signing-tools/lib/
+          chmod +x android-signing-tools/apksigner android-signing-tools/zipalign
+          test -s android-signing-tools/lib/apksigner.jar
+
       - name: Publier les fichiers compilés
         uses: actions/upload-artifact@v4
         with:
@@ -79,7 +89,4 @@ jobs:
           name: Android-signing-tools-36
           if-no-files-found: error
           retention-days: 2
-          path: |
-            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/apksigner
-            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/zipalign
-            ${{ env.ANDROID_HOME }}/build-tools/36.0.0/lib/apksigner.jar
+          path: android-signing-tools
