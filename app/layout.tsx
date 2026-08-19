@@ -4,6 +4,7 @@ import "./globals.css";
 import "./v2.css";
 import "./agenda.css";
 import "./growth-v3.css";
+import "./visual-refresh.css";
 
 const fredoka = Fredoka({ variable: "--font-display", subsets: ["latin"] });
 const plexSans = IBM_Plex_Sans({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
@@ -21,7 +22,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#15131d",
+  themeColor: "#06151d",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
