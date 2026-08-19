@@ -5,6 +5,7 @@ import "./v2.css";
 import "./agenda.css";
 import "./growth-v3.css";
 import "./visual-refresh.css";
+import "./visual-refresh-plus.css";
 
 const fredoka = Fredoka({ variable: "--font-display", subsets: ["latin"] });
 const plexSans = IBM_Plex_Sans({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });

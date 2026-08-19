@@ -1,0 +1,366 @@
+/* ESSOR — finition premium V1.3.
+   Couche strictement additive : elle ne masque, ne supprime ni ne remplace aucun contenu fonctionnel. */
+
+::selection { background: rgba(116,231,176,.24); color: #fff; }
+* { scrollbar-color: rgba(116,231,176,.26) rgba(5,19,27,.72); }
+
+/* Respiration générale */
+.section-label { color: #91d9be; letter-spacing: .14em; }
+.dashboard-card,
+.daily-card,
+.program-card,
+.rewards-section,
+.journal-section,
+.learning-section,
+.agenda-section,
+.plus-offer { position: relative; }
+
+.dashboard-card::before,
+.daily-card::before,
+.program-card::before,
+.rewards-section::before,
+.journal-section::before,
+.learning-section::before,
+.plus-offer::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(125deg, rgba(255,255,255,.025), transparent 26%, rgba(116,231,176,.018) 72%, transparent);
+}
+
+/* Accueil : plus proche des visuels Play sans toucher aux blocs ni aux informations */
+.today-hero-v2 {
+  overflow: hidden;
+  isolation: isolate;
+}
+.today-hero-v2::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 250px;
+  height: 250px;
+  right: -105px;
+  top: -110px;
+  border-radius: 50%;
+  border: 1px solid rgba(116,231,176,.08);
+  box-shadow: 0 0 80px rgba(116,231,176,.045), inset 0 0 60px rgba(116,231,176,.035);
+}
+.today-v2-kicker { color: #9eb5b0; }
+.today-v2-count strong {
+  color: #f6fff8;
+  text-shadow: 0 12px 42px rgba(82,225,170,.12);
+}
+.today-hero-v2 > h1 { text-wrap: balance; }
+.today-v2-next {
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 12px 32px rgba(0,0,0,.12);
+}
+.today-v2-metrics article,
+.today-v2-quick button {
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+.today-v2-metrics strong { color: #effbf4; }
+.today-v2-metrics small,
+.today-v2-quick small { color: #86a29c; }
+
+/* Progression */
+.progress-view-nav button,
+.track-tab {
+  border-color: rgba(184,255,222,.08);
+  background: rgba(255,255,255,.022);
+}
+.progress-view-nav button.active,
+.track-tab.active {
+  border-color: rgba(116,231,176,.20);
+  background: linear-gradient(145deg, rgba(116,231,176,.105), rgba(44,157,151,.055));
+  box-shadow: inset 0 1px rgba(255,255,255,.035);
+}
+.hero-progress {
+  overflow: hidden;
+}
+.hero-progress::before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid rgba(116,231,176,.065);
+  border-radius: 50%;
+  box-shadow: 0 0 85px rgba(116,231,176,.035), inset 0 0 75px rgba(116,231,176,.025);
+  pointer-events: none;
+}
+.xp-panel,
+.stat-grid article,
+.next-step-card {
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+
+/* Programme 90 jours : aucun jour ni mission n'est retiré */
+.program-card {
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 92% 5%, rgba(116,231,176,.11), transparent 18rem),
+    linear-gradient(155deg, rgba(13,47,56,.96), rgba(6,24,31,.98));
+}
+.program-card::after {
+  content: "";
+  position: absolute;
+  right: -115px;
+  top: -115px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(116,231,176,.07);
+  pointer-events: none;
+}
+.program-topline { position: relative; z-index: 1; }
+.program-day {
+  color: #f7fff9;
+  text-shadow: 0 8px 28px rgba(116,231,176,.08);
+}
+.program-status {
+  border: 1px solid rgba(216,237,138,.20);
+  color: #e8f39f;
+  background: rgba(216,237,138,.055);
+}
+.program-heading { position: relative; z-index: 1; }
+.program-heading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.program-stage-icon {
+  border: 1px solid rgba(116,231,176,.11);
+  background: linear-gradient(145deg, rgba(116,231,176,.12), rgba(51,168,159,.055));
+  box-shadow: 0 15px 38px rgba(0,0,0,.18), inset 0 1px rgba(255,255,255,.035);
+}
+.program-card button,
+.program-card article,
+.program-card section {
+  --program-line: rgba(184,255,222,.08);
+}
+
+/* Journal : même texte, mêmes entrées, nouvelle hiérarchie */
+.journal-section { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
+.journal-hero { overflow: hidden; border-radius: 28px; }
+.journal-hero h2,
+.learning-hero h2,
+.agenda-hero h2,
+.plus-hero h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.journal-switch {
+  padding: 5px;
+  border: 1px solid rgba(184,255,222,.08);
+  border-radius: 20px;
+  background: rgba(3,18,24,.34);
+}
+.journal-switch button {
+  border-color: transparent;
+  background: transparent;
+}
+.journal-switch button.active {
+  border-color: rgba(116,231,176,.13);
+  background: linear-gradient(145deg, rgba(116,231,176,.10), rgba(46,157,151,.055));
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 10px 30px rgba(0,0,0,.12);
+}
+.journal-private {
+  gap: 14px;
+}
+.journal-compose,
+.journal-history,
+.circle-space {
+  border-color: rgba(184,255,222,.085) !important;
+  background: linear-gradient(155deg, rgba(13,45,54,.90), rgba(6,23,30,.94)) !important;
+  box-shadow: 0 22px 70px rgba(0,0,0,.20), inset 0 1px rgba(255,255,255,.03);
+}
+.journal-compose-head i {
+  background: rgba(116,231,176,.07);
+  box-shadow: inset 0 0 0 1px rgba(116,231,176,.09);
+}
+.journal-moods button {
+  border-color: rgba(184,255,222,.075) !important;
+  background: rgba(255,255,255,.022) !important;
+}
+.journal-moods button.active {
+  border-color: rgba(116,231,176,.25) !important;
+  background: rgba(116,231,176,.075) !important;
+  box-shadow: inset 0 0 0 1px rgba(116,231,176,.035);
+}
+.journal-field textarea,
+.journal-field input {
+  border-color: rgba(184,255,222,.085) !important;
+  color: #f5fbf7 !important;
+  background: rgba(2,15,20,.39) !important;
+}
+.journal-field textarea:focus,
+.journal-field input:focus {
+  border-color: rgba(116,231,176,.38) !important;
+  box-shadow: 0 0 0 3px rgba(116,231,176,.07) !important;
+}
+.journal-entry {
+  border-color: rgba(184,255,222,.075) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.026), rgba(116,231,176,.012)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.022);
+}
+.journal-entry blockquote {
+  border-color: rgba(216,237,138,.26) !important;
+  background: rgba(216,237,138,.035) !important;
+}
+.journal-security {
+  border-color: rgba(116,231,176,.11) !important;
+  background: rgba(116,231,176,.045) !important;
+}
+
+/* Comprendre / documentation */
+.learning-section { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
+.learning-layout { gap: 14px; }
+.learning-topics {
+  padding: 8px;
+  border: 1px solid rgba(184,255,222,.075);
+  border-radius: 22px;
+  background: rgba(3,18,24,.28);
+}
+.learning-topics button {
+  border-color: rgba(184,255,222,.06) !important;
+  background: rgba(255,255,255,.018) !important;
+}
+.learning-topics button:hover {
+  border-color: rgba(116,231,176,.16) !important;
+  background: rgba(116,231,176,.035) !important;
+}
+.learning-topics button.active {
+  border-color: rgba(116,231,176,.24) !important;
+  background: linear-gradient(145deg, rgba(116,231,176,.10), rgba(49,162,155,.055)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 11px 30px rgba(0,0,0,.10);
+}
+.learning-article {
+  border-color: rgba(184,255,222,.085) !important;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(116,231,176,.075), transparent 17rem),
+    linear-gradient(155deg, rgba(13,45,54,.91), rgba(6,23,30,.95)) !important;
+  box-shadow: 0 24px 76px rgba(0,0,0,.20), inset 0 1px rgba(255,255,255,.035);
+}
+.learning-article-head > span {
+  background: linear-gradient(145deg, rgba(116,231,176,.13), rgba(55,171,161,.055)) !important;
+  box-shadow: inset 0 0 0 1px rgba(116,231,176,.09);
+}
+.learning-principle,
+.learning-exercise,
+.learning-warning {
+  border-color: rgba(116,231,176,.10) !important;
+  background: rgba(116,231,176,.04) !important;
+}
+.learning-points section {
+  border-color: rgba(184,255,222,.065) !important;
+  background: rgba(255,255,255,.018) !important;
+}
+.learning-points section > span {
+  color: #dff5aa !important;
+  background: rgba(216,237,138,.055) !important;
+}
+.learning-sources a { color: #85e9bd !important; }
+
+/* Agenda : conserver toutes les catégories / rappels, rehausser la perception */
+.agenda-hero { overflow: hidden; }
+.agenda-hero::after {
+  content: "";
+  position: absolute;
+  right: -75px;
+  top: -85px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 1px solid rgba(116,231,176,.065);
+  pointer-events: none;
+}
+.agenda-stats article,
+.agenda-compose,
+.agenda-upcoming,
+.agenda-item {
+  box-shadow: inset 0 1px rgba(255,255,255,.025), 0 13px 36px rgba(0,0,0,.09);
+}
+.agenda-kinds button {
+  border-color: rgba(184,255,222,.075);
+  background: rgba(255,255,255,.018);
+}
+.agenda-kinds button.active {
+  border-color: rgba(116,231,176,.24);
+  background: rgba(116,231,176,.075);
+}
+.agenda-item:hover { border-color: rgba(116,231,176,.14); }
+.agenda-item-main p em { color: #8ce9c0; background: rgba(116,231,176,.055); }
+
+/* ESSOR+ */
+.plus-offer { overflow: hidden; }
+.plus-offer::after {
+  content: "";
+  position: absolute;
+  right: -120px;
+  top: -130px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  border: 1px solid rgba(216,237,138,.065);
+  box-shadow: 0 0 110px rgba(116,231,176,.035);
+  pointer-events: none;
+}
+.plus-hero { position: relative; z-index: 1; }
+.plus-benefits article,
+.price-card,
+.free-promise {
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+.plus-benefits article:hover,
+.price-card:hover { border-color: rgba(116,231,176,.15); }
+
+/* Aide et sécurité : le contenu critique doit rester lisible */
+.help-section,
+.safety-note,
+.learning-warning,
+.agenda-safety,
+.agenda-web-note {
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 760px) {
+  .today-hero-v2,
+  .program-card,
+  .journal-hero,
+  .learning-hero,
+  .agenda-hero,
+  .plus-offer { border-radius: 22px !important; }
+
+  .journal-section,
+  .learning-section,
+  .agenda-section { width: calc(100% - 22px); }
+
+  .journal-hero h2,
+  .learning-hero h2,
+  .agenda-hero h2,
+  .program-heading h2,
+  .plus-hero h2 { letter-spacing: -.028em; }
+
+  .learning-topics { padding: 6px; border-radius: 18px; }
+  .journal-switch { border-radius: 17px; }
+  .hero-progress::before { width: 285px; height: 285px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .today-v2-quick button,
+  .learning-topics button,
+  .agenda-item,
+  .plus-benefits article,
+  .price-card { transition: border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease; }
+  .plus-benefits article:hover,
+  .price-card:hover { transform: translateY(-2px); }
+}

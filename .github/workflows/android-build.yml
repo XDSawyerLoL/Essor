@@ -31,19 +31,17 @@ jobs:
       - name: Installer Android 36
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Préparer ESSOR 1.2.0 pour essor-app.fr
+      - name: Vérifier ESSOR 1.3.0 pour essor-app.fr
         working-directory: android
         run: |
           set -euo pipefail
-          sed -i 's#essor-app.valentin88hernandez.chatgpt.site#essor-app.fr#g' app/build.gradle
-          sed -i 's#ESSOR — Chaque jour reprend du terrain#ESSOR — Reprendre le contrôle#g' app/build.gradle
-          sed -i 's#versionCode 2#versionCode 3#g' app/build.gradle
-          sed -i 's#versionName "1.1.0"#versionName "1.2.0"#g' app/build.gradle
           ! grep -R "essor-app.valentin88hernandez.chatgpt.site" app twa-manifest.json
           grep -q "hostName: 'essor-app.fr'" app/build.gradle
-          grep -q 'versionCode 3' app/build.gradle
-          grep -q 'versionName "1.2.0"' app/build.gradle
+          grep -q 'versionCode 4' app/build.gradle
+          grep -q 'versionName "1.3.0"' app/build.gradle
           grep -q '"host": "essor-app.fr"' twa-manifest.json
+          grep -q '"appVersion": "1.3.0"' twa-manifest.json
+          grep -q '"appVersionCode": 4' twa-manifest.json
 
       - name: Détecter la signature Play
         id: signing
@@ -57,8 +55,30 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "Signature Play absente : le workflow ne publiera aucun AAB prétendument prêt pour Google Play."
+            echo "Signature Play absente dans GitHub : l’AAB non signé sera tout de même produit pour signature hors CI."
           fi
+
+      - name: Compiler APK debug et AAB release non signé
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug bundleRelease --stacktrace
+
+      - name: Publier l’APK de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESSOR-Android-1.3.0-DEBUG
+          if-no-files-found: error
+          retention-days: 14
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publier l’AAB non signé
+        uses: actions/upload-artifact@v4
+        with:
+          name: ESSOR-Android-1.3.0-AAB-UNSIGNED
+          if-no-files-found: error
+          retention-days: 14
+          path: android/app/build/outputs/bundle/release/app-release.aab
 
       - name: Préparer la signature Play
         if: ${{ steps.signing.outputs.ready == 'true' }}
@@ -66,12 +86,6 @@ jobs:
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > upload-keystore.jks
-
-      - name: Compiler APK debug
-        working-directory: android
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
 
       - name: Compiler APK release et AAB Play signés
         if: ${{ steps.signing.outputs.ready == 'true' }}
@@ -91,19 +105,11 @@ jobs:
           grep -q "jar verified" /tmp/aab-signature.txt
           echo "AAB signé et vérifié."
 
-      - name: Publier l’APK de test
-        uses: actions/upload-artifact@v4
-        with:
-          name: ESSOR-Android-1.2.0-DEBUG
-          if-no-files-found: error
-          retention-days: 14
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-
       - name: Publier les fichiers Google Play signés
         if: ${{ steps.signing.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ESSOR-Android-1.2.0-PLAY-SIGNED
+          name: ESSOR-Android-1.3.0-PLAY-SIGNED
           if-no-files-found: error
           retention-days: 14
           path: |
