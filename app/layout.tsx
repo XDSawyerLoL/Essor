@@ -8,6 +8,7 @@ import "./visual-refresh.css";
 import "./visual-refresh-plus.css";
 import "./visual-refresh-release.css";
 import "./store-alignment.css";
+import "./jewel-sprint1.css";
 
 const fredoka = Fredoka({ variable: "--font-display", subsets: ["latin"] });
 const plexSans = IBM_Plex_Sans({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
@@ -18,14 +19,14 @@ export const metadata: Metadata = {
   description: "Un compagnon pour reprendre le contrôle d’une dépendance, d’une compulsion ou d’une habitude, un jour après l’autre.",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
-  other: { "codex-preview": "development", "essor-visual-release": "store-2026-08-19" },
+  other: { "codex-preview": "development", "essor-visual-release": "jewel-sprint1-2026-08-19" },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#03151c",
+  themeColor: "#021419",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
