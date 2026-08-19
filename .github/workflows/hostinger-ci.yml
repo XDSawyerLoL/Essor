@@ -29,6 +29,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Enregistrer le run Hostinger
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p .github/build-meta
+          cat > .github/build-meta/hostinger-last-build.txt <<EOF
+          run_id=$RUN_ID
+          head_sha=$HEAD_SHA
+          status=running
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/build-meta/hostinger-last-build.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Enregistre le run Hostinger ESSOR"
+            git push origin HEAD:hostinger-migration
+          fi
+
       - name: Node 22
         uses: actions/setup-node@v4
         with:
@@ -57,6 +77,7 @@ jobs:
 
       - name: Enregistrer package-lock si nécessaire
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add package-lock.json
@@ -65,6 +86,7 @@ jobs:
             exit 0
           fi
           git commit -m "Synchronise package-lock pour Hostinger"
+          git pull --rebase origin hostinger-migration
           git push origin HEAD:hostinger-migration
 
       - name: Enregistrer le statut du build Hostinger
