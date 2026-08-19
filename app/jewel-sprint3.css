@@ -1,0 +1,304 @@
+/* ESSOR — JEWEL SPRINT 3
+   ESSOR+ + onboarding + confidentialité + partage + finitions de marque.
+   Toujours additive : aucun contenu ni mécanisme métier n'est retiré. */
+
+/* =========================
+   ONBOARDING / CONFIGURATION
+   ========================= */
+.setup-card {
+  width: min(920px, calc(100% - 48px)) !important;
+  padding: clamp(30px, 5vw, 52px) !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 88% 7%, rgba(114,232,180,.12), transparent 18rem),
+    radial-gradient(circle at 8% 90%, rgba(226,239,134,.04), transparent 18rem),
+    linear-gradient(148deg, rgba(7,50,55,.97), rgba(2,27,33,.99)) !important;
+  box-shadow: 0 38px 115px rgba(0,0,0,.31), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.setup-heading {
+  grid-template-columns: 88px 1fr !important;
+  gap: 24px !important;
+  padding-bottom: 27px !important;
+  border-color: rgba(114,232,180,.09) !important;
+}
+.setup-mascot {
+  width: 80px !important;
+  height: 80px !important;
+  border: 1px solid rgba(114,232,180,.17);
+  border-radius: 25px !important;
+  font-size: 0 !important;
+  background:
+    url('/brand-mark.svg') center / 56px 56px no-repeat,
+    linear-gradient(145deg, rgba(114,232,180,.11), rgba(255,255,255,.018)) !important;
+  box-shadow: 0 20px 48px rgba(0,0,0,.16), 0 0 32px rgba(114,232,180,.055) !important;
+}
+.setup-heading h2 {
+  color: #f6fff9 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(34px, 4vw, 50px) !important;
+  font-weight: 400 !important;
+  line-height: .98 !important;
+}
+.setup-heading p:last-child { color: #a6beb8 !important; }
+.field > span { color: #dceae5 !important; }
+.field small { color: #7f9b94 !important; }
+.privacy-line { color: #7f9992 !important; }
+
+/* =========================
+   ESSOR+ — OFFRE PREMIUM
+   ========================= */
+.plus-offer,
+.plus-verifying {
+  width: min(1080px, calc(100% - 48px)) !important;
+  margin-inline: auto !important;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(circle at 78% 3%, rgba(225,239,134,.075), transparent 21rem),
+    radial-gradient(circle at 16% 32%, rgba(114,232,180,.12), transparent 19rem),
+    linear-gradient(148deg, rgba(7,51,56,.98), rgba(2,27,33,.995)) !important;
+  box-shadow: 0 42px 125px rgba(0,0,0,.33), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.plus-offer { padding: clamp(32px, 5vw, 58px) !important; }
+.plus-offer::after {
+  width: 470px !important;
+  height: 470px !important;
+  right: -190px !important;
+  top: -210px !important;
+  border-color: rgba(225,239,134,.075) !important;
+}
+.plus-hero {
+  max-width: 780px;
+  margin-inline: auto;
+  text-align: center;
+}
+.plus-hero::before {
+  content: "";
+  display: block;
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 20px;
+  border: 1px solid rgba(114,232,180,.18);
+  border-radius: 28px;
+  background:
+    url('/brand-mark.svg') center / 60px 60px no-repeat,
+    radial-gradient(circle, rgba(114,232,180,.12), rgba(114,232,180,.015));
+  box-shadow: 0 0 48px rgba(114,232,180,.10), inset 0 1px rgba(255,255,255,.04);
+}
+.plus-hero h2 {
+  color: #f7fff9 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(46px, 5.5vw, 76px) !important;
+  font-weight: 400 !important;
+  line-height: .91 !important;
+  letter-spacing: -.055em !important;
+}
+.plus-hero h2 em {
+  color: #83e9b7 !important;
+  font-style: normal !important;
+}
+.plus-hero > p { max-width: 680px; margin-inline: auto; color: #a9c0ba !important; font-size: 15px !important; line-height: 1.65 !important; }
+.plus-benefits {
+  margin-top: 28px !important;
+  gap: 11px !important;
+}
+.plus-benefits article {
+  min-height: 150px;
+  padding: 20px !important;
+  border: 1px solid rgba(114,232,180,.09) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.03), rgba(114,232,180,.012)) !important;
+}
+.plus-benefits article > span {
+  width: 46px !important;
+  height: 46px !important;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: rgba(114,232,180,.055);
+}
+.plus-benefits h3 { color: #eefbf5 !important; }
+.plus-benefits p { color: #91aaa4 !important; line-height: 1.55 !important; }
+.price-grid { gap: 12px !important; margin-top: 25px !important; }
+.price-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px !important;
+  border: 1px solid rgba(114,232,180,.10) !important;
+  border-radius: 22px !important;
+  background: rgba(2,26,32,.43) !important;
+}
+.price-card.featured {
+  border-color: rgba(114,232,180,.30) !important;
+  background:
+    radial-gradient(circle at 90% 5%, rgba(225,239,134,.08), transparent 12rem),
+    linear-gradient(145deg, rgba(114,232,180,.09), rgba(4,34,40,.55)) !important;
+  box-shadow: 0 22px 60px rgba(0,0,0,.16), 0 0 34px rgba(114,232,180,.045) !important;
+}
+.price-card strong { color: #f5fff8 !important; }
+.price-card .price { font-family: Georgia, "Times New Roman", serif !important; font-weight: 400 !important; }
+.free-promise {
+  border-color: rgba(114,232,180,.11) !important;
+  border-radius: 19px !important;
+  background: rgba(114,232,180,.035) !important;
+}
+.subscriber-banner {
+  width: min(1180px, calc(100% - 48px)) !important;
+  margin-inline: auto !important;
+  border-color: rgba(225,239,134,.14) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(100deg, rgba(225,239,134,.05), rgba(114,232,180,.04)) !important;
+}
+.subscriber-banner > span {
+  width: 44px !important;
+  height: 44px !important;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(225,239,134,.06);
+}
+
+/* =========================
+   VERROUILLAGE / CONFIDENTIALITÉ
+   ========================= */
+.privacy-shell {
+  min-height: 100dvh !important;
+  background:
+    radial-gradient(circle at 50% 5%, rgba(114,232,180,.18), transparent 27rem),
+    radial-gradient(circle at 88% 74%, rgba(225,239,134,.04), transparent 20rem),
+    linear-gradient(180deg, #02171c, #021217) !important;
+}
+.lock-card {
+  width: min(650px, calc(100% - 28px)) !important;
+  padding: clamp(28px, 5vw, 48px) !important;
+  border-radius: 34px !important;
+  box-shadow: 0 44px 130px rgba(0,0,0,.38), 0 0 72px rgba(114,232,180,.045), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.lock-tree {
+  min-height: 195px !important;
+  border-bottom: 1px solid rgba(114,232,180,.06);
+  margin-bottom: 18px !important;
+}
+.lock-tree .plant { filter: drop-shadow(0 22px 44px rgba(114,232,180,.15)); }
+.privacy-kicker { letter-spacing: .16em !important; }
+.lock-card h1 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(44px, 6vw, 66px) !important;
+  font-weight: 400 !important;
+  line-height: .93 !important;
+  letter-spacing: -.045em !important;
+}
+.pin-field > span { color: #9ed8c1 !important; letter-spacing: .11em !important; }
+.pin-field input { min-height: 74px !important; border-radius: 19px !important; font-size: 28px !important; letter-spacing: .3em; }
+.lock-submit { min-height: 58px !important; border-radius: 17px !important; }
+.privacy-modal,
+.privacy-panel {
+  border-color: rgba(114,232,180,.12) !important;
+  background: linear-gradient(150deg, rgba(7,47,53,.98), rgba(2,26,32,.995)) !important;
+}
+.privacy-grid article {
+  border-color: rgba(114,232,180,.08) !important;
+  border-radius: 17px !important;
+  background: rgba(255,255,255,.02) !important;
+}
+.privacy-control,
+.privacy-health {
+  border-radius: 17px !important;
+}
+
+/* =========================
+   PARTAGE / CARTE DE VICTOIRE
+   ========================= */
+.share-backdrop { backdrop-filter: blur(22px) !important; background: rgba(0,12,16,.82) !important; }
+.share-dialog {
+  border-color: rgba(114,232,180,.15) !important;
+  border-radius: 31px !important;
+  background:
+    radial-gradient(circle at 84% 8%, rgba(114,232,180,.10), transparent 18rem),
+    linear-gradient(150deg, rgba(7,47,53,.99), rgba(2,26,32,.995)) !important;
+  box-shadow: 0 44px 135px rgba(0,0,0,.45), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.share-heading h2 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -.04em !important;
+}
+.share-heading h2 em { color: #83e9b7 !important; font-style: normal !important; }
+.share-card-preview {
+  border-color: rgba(114,232,180,.19) !important;
+  border-radius: 26px !important;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(114,232,180,.15), transparent 15rem),
+    linear-gradient(160deg, #073239, #031c23) !important;
+  box-shadow: 0 30px 78px rgba(0,0,0,.24), 0 0 35px rgba(114,232,180,.045) !important;
+}
+.share-card-brand {
+  font-family: Georgia, "Times New Roman", serif !important;
+  letter-spacing: .08em;
+}
+.social-share-grid button,
+.copy-share,
+.native-share,
+.download-card {
+  border-radius: 14px !important;
+}
+
+/* =========================
+   FOOTER / MICRO-FINITIONS
+   ========================= */
+footer {
+  width: min(1180px, calc(100% - 48px)) !important;
+  margin-inline: auto !important;
+  padding-top: 34px !important;
+  border-top-color: rgba(114,232,180,.075) !important;
+}
+.footer-brand > span:first-child {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 0 !important;
+  border: 1px solid rgba(114,232,180,.11);
+  border-radius: 13px;
+  background: url('/brand-mark.svg') center / 29px 29px no-repeat, rgba(114,232,180,.035);
+}
+footer p { color: #79938c !important; }
+.footer-privacy { color: #8fdcba !important; }
+
+@media (max-width: 760px) {
+  .setup-card,
+  .plus-offer,
+  .plus-verifying,
+  .subscriber-banner { width: calc(100% - 22px) !important; }
+  .setup-card { padding: 22px 16px !important; border-radius: 25px !important; }
+  .setup-heading { grid-template-columns: 62px 1fr !important; gap: 14px !important; }
+  .setup-mascot { width: 58px !important; height: 58px !important; border-radius: 18px !important; background-size: 42px 42px !important; }
+  .setup-heading h2 { font-size: 34px !important; }
+  .form-row { grid-template-columns: 1fr !important; gap: 0 !important; }
+
+  .plus-offer { padding: 25px 15px !important; border-radius: 25px !important; }
+  .plus-hero::before { width: 68px; height: 68px; border-radius: 22px; background-size: 48px 48px; }
+  .plus-hero h2 { font-size: 48px !important; }
+  .plus-benefits,
+  .price-grid { grid-template-columns: 1fr !important; }
+  .plus-benefits article { min-height: 118px; }
+
+  .lock-card { padding: 25px 16px !important; border-radius: 26px !important; }
+  .lock-tree { min-height: 165px !important; }
+  .lock-card h1 { font-size: 45px !important; }
+  .pin-field input { min-height: 66px !important; }
+
+  .share-dialog { border-radius: 24px !important; }
+  .share-layout { grid-template-columns: 1fr !important; }
+  .social-share-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  footer { width: calc(100% - 22px) !important; padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .plus-benefits article,
+  .price-card,
+  .privacy-grid article,
+  .social-share-grid button { transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+  .plus-benefits article:hover,
+  .price-card:hover,
+  .privacy-grid article:hover { transform: translateY(-2px); border-color: rgba(114,232,180,.20) !important; }
+}
