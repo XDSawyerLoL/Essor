@@ -1,0 +1,575 @@
+/* ESSOR — JEWEL SPRINT 2
+   Progression + Journal + Agenda + Comprendre.
+   Couche additive : aucune fonction ni information n'est masquée ou supprimée. */
+
+/* =========================
+   NAVIGATION PRODUIT
+   ========================= */
+.app-view-nav {
+  width: min(820px, calc(100% - 40px)) !important;
+  margin: 18px auto 28px !important;
+  padding: 6px !important;
+  border-radius: 22px !important;
+}
+.app-view-nav button {
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  gap: 7px !important;
+}
+.app-view-nav button span { font-size: 17px !important; }
+.app-view-nav button b { font-size: 10px !important; letter-spacing: -.01em; }
+.app-view-nav button.active {
+  box-shadow: inset 0 1px rgba(255,255,255,.045), 0 12px 30px rgba(0,0,0,.13) !important;
+}
+.progress-view-nav {
+  width: min(820px, calc(100% - 40px)) !important;
+  margin: -14px auto 22px !important;
+  padding: 5px !important;
+  border: 1px solid rgba(115,235,184,.09) !important;
+  border-radius: 19px !important;
+  background: rgba(3,29,35,.52) !important;
+}
+.progress-view-nav button {
+  min-height: 58px !important;
+  border-radius: 14px !important;
+}
+.progress-view-nav button.active {
+  border-color: rgba(114,232,180,.20) !important;
+  background: rgba(114,232,180,.075) !important;
+}
+
+/* =========================
+   PROGRESSION — DASHBOARD COMPACT
+   ========================= */
+.dashboard-card {
+  width: min(1180px, calc(100% - 48px)) !important;
+  margin-bottom: 24px !important;
+  padding: 18px !important;
+  border-color: rgba(115,235,184,.14) !important;
+  border-radius: 32px !important;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(114,232,180,.10), transparent 22rem),
+    linear-gradient(150deg, rgba(7,47,53,.96), rgba(2,26,32,.99)) !important;
+  box-shadow: 0 38px 110px rgba(0,0,0,.29), inset 0 1px rgba(255,255,255,.035) !important;
+}
+.dashboard-head {
+  min-height: 58px !important;
+  padding: 3px 5px 14px !important;
+  border-bottom: 1px solid rgba(115,235,184,.075);
+}
+.streak-badge,
+.level-badge {
+  min-height: 34px !important;
+  border-radius: 999px !important;
+}
+.streak-badge {
+  color: #e7f198 !important;
+  border-color: rgba(226,239,134,.16) !important;
+  background: rgba(226,239,134,.055) !important;
+}
+.level-badge {
+  color: #a9ead0 !important;
+  border-color: rgba(114,232,180,.14) !important;
+  background: rgba(114,232,180,.045) !important;
+}
+.dashboard-share {
+  border-color: rgba(114,232,180,.13) !important;
+  color: #d8eee6 !important;
+  background: rgba(255,255,255,.025) !important;
+}
+.presence-card {
+  margin: 14px 2px 0 !important;
+  border-color: rgba(114,232,180,.10) !important;
+  border-radius: 17px !important;
+  background: rgba(114,232,180,.035) !important;
+}
+.hero-progress {
+  min-height: 510px !important;
+  margin-top: 14px;
+  padding: 30px 30px 24px !important;
+  display: grid !important;
+  grid-template-columns: minmax(275px, .80fr) minmax(390px, 1.20fr);
+  grid-template-areas:
+    "plant stage"
+    "plant count"
+    "plant title"
+    "plant motivation"
+    "plant quote"
+    "next next"
+    "xp xp";
+  column-gap: 40px;
+  row-gap: 7px;
+  align-items: center !important;
+  text-align: left !important;
+  border-radius: 27px !important;
+  background:
+    radial-gradient(circle at 22% 37%, rgba(114,232,180,.17), transparent 19rem),
+    radial-gradient(circle at 88% 12%, rgba(225,239,134,.06), transparent 16rem),
+    linear-gradient(145deg, rgba(6,49,54,.91), rgba(2,26,32,.97)) !important;
+}
+.hero-progress::after { opacity: .09 !important; }
+.hero-progress .garden-halo {
+  grid-area: plant;
+  position: absolute !important;
+  top: 55px !important;
+  left: 85px !important;
+  width: 285px !important;
+  height: 285px !important;
+  border-color: rgba(114,232,180,.13) !important;
+  box-shadow: 0 0 88px rgba(114,232,180,.095), inset 0 0 70px rgba(114,232,180,.045) !important;
+}
+.hero-progress > .plant {
+  grid-area: plant;
+  align-self: center;
+  justify-self: center;
+  margin: 0 !important;
+  transform: scale(1.04);
+  filter: drop-shadow(0 24px 44px rgba(114,232,180,.13));
+}
+.hero-progress .growth-stage {
+  grid-area: stage;
+  justify-self: start;
+  margin: 0 !important;
+  border-color: rgba(114,232,180,.16) !important;
+  color: #8deabc !important;
+  background: rgba(114,232,180,.05) !important;
+}
+.hero-progress .day-count {
+  grid-area: count;
+  justify-self: start;
+  margin: 8px 0 0 !important;
+}
+.hero-progress .day-count strong {
+  color: #f6fff9 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(74px, 6vw, 102px) !important;
+  font-weight: 400 !important;
+  text-shadow: 0 18px 50px rgba(114,232,180,.10) !important;
+}
+.hero-progress h2 {
+  grid-area: title;
+  max-width: 560px !important;
+  margin: 8px 0 0 !important;
+  color: #f6fff9 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(32px, 3.1vw, 47px) !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: -.04em !important;
+}
+.hero-progress .motivation {
+  grid-area: motivation;
+  margin: 4px 0 0 !important;
+  color: #9eb8b2 !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+}
+.hero-progress blockquote {
+  grid-area: quote;
+  margin: 5px 0 0 !important;
+  color: #b7e9d2 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 17px !important;
+  font-style: italic;
+}
+.hero-progress .next-step-card {
+  grid-area: next;
+  width: 100% !important;
+  margin: 19px 0 0 !important;
+  padding: 17px 19px !important;
+  border-color: rgba(114,232,180,.15) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(145deg, rgba(114,232,180,.055), rgba(255,255,255,.018)) !important;
+}
+.hero-progress .next-step-card > span { color: #7bdcac !important; }
+.hero-progress .next-step-card strong { color: #effbf5 !important; }
+.hero-progress .next-step-card b { color: #e5ef91 !important; }
+.hero-progress .xp-panel {
+  grid-area: xp;
+  width: 100% !important;
+  margin: 3px 0 0 !important;
+  padding: 17px 19px !important;
+  border: 1px solid rgba(114,232,180,.10) !important;
+  border-radius: 18px !important;
+  background: rgba(2,24,30,.34) !important;
+}
+.xp-track { background: rgba(1,20,25,.72) !important; }
+.xp-track i { background: linear-gradient(90deg, #65e2ae, #a1eda9 70%, #e2ef86) !important; box-shadow: 0 0 18px rgba(114,232,180,.18); }
+.stat-grid {
+  margin-top: 12px !important;
+  gap: 10px !important;
+}
+.stat-grid article {
+  min-height: 114px !important;
+  padding: 18px !important;
+  border: 1px solid rgba(114,232,180,.09) !important;
+  border-radius: 19px !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.03), rgba(114,232,180,.012)) !important;
+}
+.stat-grid article > span {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 15px !important;
+  background: rgba(114,232,180,.06) !important;
+}
+.stat-grid strong { color: #f4fff8 !important; }
+
+.rewards-section,
+.milestones {
+  width: min(1180px, calc(100% - 48px)) !important;
+  margin-inline: auto !important;
+  padding: 30px !important;
+  border: 1px solid rgba(114,232,180,.12);
+  border-radius: 30px !important;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(114,232,180,.08), transparent 18rem),
+    linear-gradient(150deg, rgba(7,45,51,.90), rgba(2,27,33,.97)) !important;
+  box-shadow: 0 28px 90px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.03);
+}
+.section-heading h2 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -.035em !important;
+}
+.reward-grid { gap: 12px !important; }
+.reward {
+  border-color: rgba(114,232,180,.08) !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,.021) !important;
+}
+.reward.unlocked {
+  border-color: rgba(114,232,180,.24) !important;
+  background: radial-gradient(circle at 50% 20%, rgba(114,232,180,.09), transparent 9rem), rgba(255,255,255,.025) !important;
+  box-shadow: 0 18px 42px rgba(0,0,0,.13), 0 0 24px rgba(114,232,180,.035) !important;
+}
+.reward-icon {
+  filter: drop-shadow(0 8px 20px rgba(114,232,180,.15));
+}
+.milestone {
+  border-color: rgba(114,232,180,.08) !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.018) !important;
+}
+.milestone.done {
+  border-color: rgba(114,232,180,.20) !important;
+  background: rgba(114,232,180,.045) !important;
+}
+
+/* =========================
+   JOURNAL — INTIME ET PRÉCIEUX
+   ========================= */
+.journal-section {
+  width: min(1180px, calc(100% - 48px)) !important;
+  margin-inline: auto !important;
+}
+.journal-hero {
+  position: relative;
+  min-height: 245px;
+  padding: 35px 38px !important;
+  display: grid !important;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+  gap: 28px !important;
+  border-radius: 31px !important;
+  background:
+    radial-gradient(circle at 14% 48%, rgba(114,232,180,.13), transparent 14rem),
+    radial-gradient(circle at 90% 18%, rgba(226,239,134,.055), transparent 17rem),
+    linear-gradient(150deg, rgba(7,50,55,.96), rgba(2,27,33,.99)) !important;
+  box-shadow: 0 34px 100px rgba(0,0,0,.26), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.journal-hero::after {
+  content: "";
+  position: absolute;
+  right: -95px;
+  top: -100px;
+  width: 280px;
+  height: 280px;
+  border: 1px solid rgba(114,232,180,.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.journal-orb {
+  width: 92px !important;
+  height: 92px !important;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(114,232,180,.16) !important;
+  border-radius: 28px !important;
+  background: linear-gradient(145deg, rgba(114,232,180,.10), rgba(255,255,255,.02)) !important;
+  box-shadow: 0 20px 48px rgba(0,0,0,.15), 0 0 30px rgba(114,232,180,.05) !important;
+  font-size: 35px !important;
+}
+.journal-hero h2 {
+  margin: 3px 0 10px !important;
+  color: #f7fff9 !important;
+  font-size: clamp(39px, 4.1vw, 61px) !important;
+  line-height: .96 !important;
+}
+.journal-hero h2 em {
+  color: #85e9b7 !important;
+  font-style: normal !important;
+}
+.journal-hero p:last-child { max-width: 760px; color: #a6bdb7 !important; line-height: 1.6 !important; }
+.journal-switch {
+  width: min(620px, 100%);
+  margin: 18px auto !important;
+  padding: 5px !important;
+  border-radius: 19px !important;
+}
+.journal-switch button { min-height: 58px !important; border-radius: 14px !important; }
+.journal-private {
+  display: grid !important;
+  grid-template-columns: minmax(360px, .90fr) minmax(430px, 1.10fr);
+  gap: 14px !important;
+  align-items: start;
+}
+.journal-compose,
+.journal-history {
+  border-radius: 25px !important;
+}
+.journal-compose {
+  position: sticky;
+  top: 16px;
+  padding: 25px !important;
+}
+.journal-compose-head {
+  padding-bottom: 17px;
+  border-bottom: 1px solid rgba(114,232,180,.075);
+}
+.journal-compose-head h3 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(24px, 2.1vw, 31px) !important;
+  font-weight: 400 !important;
+  line-height: 1.1 !important;
+}
+.journal-compose-head i {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+}
+.journal-moods { margin-top: 17px !important; }
+.journal-moods > div { gap: 7px !important; }
+.journal-moods button {
+  min-height: 45px !important;
+  border-radius: 13px !important;
+}
+.journal-field textarea { min-height: 200px; border-radius: 16px !important; }
+.journal-field input { border-radius: 14px !important; }
+.journal-actions .button.primary { border-radius: 15px !important; }
+.journal-security { border-radius: 14px !important; }
+.journal-history { padding: 25px !important; }
+.journal-history-head {
+  padding-bottom: 17px;
+  border-bottom: 1px solid rgba(114,232,180,.075);
+}
+.journal-history-head h3 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+}
+.journal-entry-list { gap: 10px !important; }
+.journal-entry {
+  position: relative;
+  overflow: hidden;
+  padding: 18px !important;
+  border-radius: 18px !important;
+}
+.journal-entry::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(#72e8b4, rgba(114,232,180,0));
+  opacity: .62;
+}
+.journal-entry-meta > span {
+  width: 42px !important;
+  height: 42px !important;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: rgba(114,232,180,.055);
+}
+.journal-entry > p {
+  color: #c1d2cd !important;
+  line-height: 1.65 !important;
+}
+.journal-entry blockquote { border-radius: 14px !important; }
+.journal-empty {
+  min-height: 280px !important;
+  border-color: rgba(114,232,180,.09) !important;
+  border-radius: 19px !important;
+  background: rgba(2,25,31,.30) !important;
+}
+
+/* =========================
+   AGENDA — FINITION
+   ========================= */
+.agenda-section { width: min(1180px, calc(100% - 48px)) !important; }
+.agenda-hero {
+  min-height: 230px;
+  border-radius: 31px !important;
+  background:
+    radial-gradient(circle at 88% 16%, rgba(114,232,180,.105), transparent 18rem),
+    linear-gradient(150deg, rgba(7,50,55,.96), rgba(2,27,33,.99)) !important;
+  box-shadow: 0 34px 100px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.agenda-hero h2 {
+  color: #f7fff9 !important;
+  font-size: clamp(39px, 4vw, 58px) !important;
+  line-height: .97 !important;
+}
+.agenda-hero h2 em { color: #82e9b7 !important; font-style: normal !important; }
+.agenda-stats { gap: 10px !important; }
+.agenda-stats article {
+  min-height: 98px !important;
+  border-color: rgba(114,232,180,.09) !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.022) !important;
+}
+.agenda-compose,
+.agenda-upcoming { border-radius: 24px !important; }
+.agenda-kinds button { min-height: 50px !important; border-radius: 14px !important; }
+.agenda-item { border-radius: 17px !important; }
+
+/* =========================
+   COMPRENDRE — ÉDITORIAL PREMIUM
+   ========================= */
+.learning-section { width: min(1180px, calc(100% - 48px)) !important; }
+.learning-hero {
+  min-height: 240px;
+  border-radius: 31px !important;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(114,232,180,.10), transparent 14rem),
+    linear-gradient(150deg, rgba(7,50,55,.96), rgba(2,27,33,.99)) !important;
+  box-shadow: 0 34px 100px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.04) !important;
+}
+.learning-hero h2 {
+  color: #f7fff9 !important;
+  font-size: clamp(40px, 4.2vw, 62px) !important;
+  line-height: .95 !important;
+}
+.learning-hero h2 em { color: #78e5b2 !important; font-style: normal !important; }
+.learning-layout {
+  grid-template-columns: minmax(245px, .62fr) minmax(520px, 1.38fr) !important;
+  gap: 14px !important;
+}
+.learning-topics { position: sticky; top: 16px; border-radius: 22px !important; }
+.learning-topics button { min-height: 74px !important; border-radius: 15px !important; }
+.learning-article {
+  padding: 30px !important;
+  border-radius: 25px !important;
+}
+.learning-article-head h3 {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(32px, 3vw, 45px) !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+}
+.learning-summary { color: #bacdc8 !important; font-size: 14px !important; line-height: 1.7 !important; }
+.learning-principle { border-radius: 17px !important; }
+.learning-points { gap: 10px !important; }
+.learning-points section { border-radius: 17px !important; }
+.learning-exercise { border-radius: 17px !important; }
+
+@media (max-width: 940px) {
+  .hero-progress {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "plant"
+      "stage"
+      "count"
+      "title"
+      "motivation"
+      "quote"
+      "next"
+      "xp";
+    text-align: center !important;
+  }
+  .hero-progress .garden-halo { left: 50% !important; transform: translateX(-50%); }
+  .hero-progress .growth-stage,
+  .hero-progress .day-count { justify-self: center; }
+  .hero-progress h2,
+  .hero-progress .motivation,
+  .hero-progress blockquote { justify-self: center; text-align: center; }
+  .journal-private { grid-template-columns: 1fr !important; }
+  .journal-compose { position: relative; top: 0; }
+  .learning-layout { grid-template-columns: 1fr !important; }
+  .learning-topics { position: relative; top: 0; }
+}
+
+@media (max-width: 760px) {
+  .app-view-nav {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  .app-view-nav button { min-height: 48px !important; }
+  .progress-view-nav { width: calc(100% - 22px) !important; margin: 10px auto 14px !important; }
+  .progress-view-nav button { min-height: 52px !important; }
+
+  .dashboard-card,
+  .rewards-section,
+  .milestones,
+  .journal-section,
+  .agenda-section,
+  .learning-section { width: calc(100% - 22px) !important; }
+  .dashboard-card { padding: 11px !important; border-radius: 24px !important; }
+  .dashboard-head { gap: 6px !important; flex-wrap: wrap; }
+  .dashboard-share { order: 3; width: 100%; margin-left: 0 !important; }
+  .hero-progress {
+    min-height: 0 !important;
+    padding: 20px 13px 15px !important;
+    row-gap: 8px;
+    border-radius: 20px !important;
+  }
+  .hero-progress .garden-halo { top: 34px !important; width: 230px !important; height: 230px !important; }
+  .hero-progress > .plant { transform: scale(.76); margin: -6px 0 -18px !important; }
+  .hero-progress .day-count strong { font-size: 68px !important; }
+  .hero-progress h2 { font-size: 33px !important; }
+  .hero-progress .next-step-card,
+  .hero-progress .xp-panel { padding: 14px !important; }
+  .stat-grid { grid-template-columns: 1fr !important; }
+  .stat-grid article { min-height: 88px !important; }
+
+  .rewards-section,
+  .milestones { padding: 18px 14px !important; border-radius: 23px !important; }
+  .reward-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+
+  .journal-hero {
+    min-height: 0;
+    padding: 25px 17px !important;
+    grid-template-columns: 62px 1fr;
+    gap: 14px !important;
+    border-radius: 23px !important;
+  }
+  .journal-orb { width: 58px !important; height: 58px !important; border-radius: 18px !important; font-size: 25px !important; }
+  .journal-hero h2 { font-size: 35px !important; }
+  .journal-switch { margin: 12px auto !important; }
+  .journal-compose,
+  .journal-history { padding: 17px !important; border-radius: 20px !important; }
+  .journal-field textarea { min-height: 170px; }
+
+  .agenda-hero,
+  .learning-hero { min-height: 0; border-radius: 23px !important; }
+  .agenda-hero h2,
+  .learning-hero h2 { font-size: 35px !important; }
+  .agenda-stats { grid-template-columns: 1fr !important; }
+  .agenda-stats article { min-height: 76px !important; }
+  .learning-article { padding: 18px !important; border-radius: 20px !important; }
+  .learning-article-head h3 { font-size: 31px !important; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reward,
+  .milestone,
+  .journal-entry,
+  .learning-topics button,
+  .agenda-item { transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+  .reward:hover,
+  .milestone:hover,
+  .journal-entry:hover,
+  .agenda-item:hover { transform: translateY(-2px); border-color: rgba(114,232,180,.20) !important; }
+}
