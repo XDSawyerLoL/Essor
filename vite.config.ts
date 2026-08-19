@@ -6,6 +6,7 @@ import { agendaTransform } from "./build/agenda-transform";
 import { communityAccess } from "./build/community-access-transform";
 import { essorV2 } from "./build/essor-v2-transform";
 import { growthV3 } from "./build/growth-v3-transform";
+import { jewelSprint1 } from "./build/jewel-sprint1-transform";
 import { pagesBridge } from "./build/pages-bridge-transform";
 import { sites } from "./build/sites-vite-plugin";
 
@@ -60,6 +61,7 @@ export default defineConfig(async () => {
       growthV3(),
       adaptiveSupport(),
       communityAccess(),
+      jewelSprint1(),
       pagesBridge(),
       vinext(),
       sites(),
