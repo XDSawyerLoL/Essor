@@ -66,3 +66,27 @@ jobs:
           fi
           git commit -m "Synchronise package-lock pour Hostinger"
           git push origin HEAD:hostinger-migration
+
+      - name: Enregistrer le statut du build Hostinger
+        if: ${{ always() }}
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          BUILD_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          mkdir -p .github/build-meta
+          cat > .github/build-meta/hostinger-last-build.txt <<EOF
+          run_id=$RUN_ID
+          head_sha=$HEAD_SHA
+          status=$BUILD_STATUS
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/build-meta/hostinger-last-build.txt
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Enregistre le dernier build Hostinger ESSOR"
+          git pull --rebase origin hostinger-migration
+          git push origin HEAD:hostinger-migration
