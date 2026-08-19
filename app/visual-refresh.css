@@ -1,0 +1,316 @@
+/* ESSOR Visual Refresh — couche purement visuelle et non destructive.
+   Aucun contenu, parcours, donnée ou fonctionnalité n'est supprimé par cette couche. */
+
+:root {
+  --night: #06151d;
+  --night-soft: #0a2028;
+  --card: #0d2932;
+  --card-bright: #123640;
+  --ink: #f6fbf8;
+  --muted: #a9c0bc;
+  --line: rgba(184, 255, 222, .11);
+  --mint: #74e7b0;
+  --violet: #58b7b0;
+  --gold: #d8ed8a;
+  --coral: #ff9b8e;
+}
+
+html { background: var(--night); }
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 82% 3%, rgba(90, 233, 175, .11), transparent 28rem),
+    radial-gradient(circle at 12% 40%, rgba(33, 167, 164, .10), transparent 32rem),
+    linear-gradient(180deg, #05131b 0%, #071b22 48%, #06151d 100%);
+  background-attachment: fixed;
+}
+
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(116,231,176,.07), transparent 27rem),
+    linear-gradient(115deg, transparent 0 65%, rgba(116,231,176,.025) 65% 66%, transparent 66% 100%);
+}
+
+.aurora { opacity: .17; filter: blur(145px); }
+.aurora-one { background: #1cae9a; }
+.aurora-two { background: #63efad; }
+
+/* Header */
+.topbar {
+  width: min(1180px, calc(100% - 40px));
+  height: 84px;
+  border-color: rgba(184,255,222,.10);
+}
+.brand-emoji { filter: drop-shadow(0 0 14px rgba(116,231,176,.32)); }
+.brand-name {
+  background: linear-gradient(100deg, #dfffe8 0%, #7ee8b5 42%, #d8ed8a 73%, #ffae93 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: 0 0 28px rgba(116,231,176,.08);
+}
+.profile-chip, .top-lock, .help-link {
+  border-color: rgba(184,255,222,.10);
+  background: rgba(10,35,43,.62);
+  box-shadow: inset 0 1px rgba(255,255,255,.035);
+  backdrop-filter: blur(18px);
+}
+.profile-avatar { background: linear-gradient(145deg, rgba(116,231,176,.18), rgba(76,184,176,.12)); }
+.plus-chip {
+  border-color: rgba(216,237,138,.24);
+  background: linear-gradient(110deg, rgba(216,237,138,.10), rgba(75,184,174,.08));
+  box-shadow: inset 0 1px rgba(255,255,255,.035);
+}
+
+/* Intro / marque */
+.intro { margin-top: 68px; }
+.magic-pill, .growth-stage {
+  border-color: rgba(216,237,138,.23);
+  color: #e7f69d;
+  background: linear-gradient(100deg, rgba(216,237,138,.08), rgba(116,231,176,.065));
+  box-shadow: 0 10px 34px rgba(0,0,0,.18), inset 0 1px rgba(255,255,255,.035);
+}
+.intro h1 {
+  color: #f8fbf8;
+  text-shadow: 0 16px 50px rgba(0,0,0,.28);
+}
+.intro h1 em {
+  background: linear-gradient(100deg, #62dfad 0%, #b8ec9a 40%, #f1d77a 66%, #ff927e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  filter: drop-shadow(0 8px 28px rgba(103,225,171,.08));
+}
+.intro > p { color: #b3c5c2; }
+
+/* Sélecteur de parcours */
+.v2-track-picker > summary,
+.v2-track-panel {
+  border-color: rgba(184,255,222,.10);
+  background: linear-gradient(145deg, rgba(16,53,62,.92), rgba(7,26,34,.96));
+  box-shadow: 0 22px 65px rgba(0,0,0,.30), inset 0 1px rgba(255,255,255,.04);
+}
+.v2-track-option,
+.v2-track-search {
+  border-color: rgba(184,255,222,.08);
+  background: rgba(255,255,255,.025);
+}
+.v2-track-option:hover { border-color: rgba(116,231,176,.20); background: rgba(116,231,176,.045); }
+.v2-track-option.active {
+  border-color: color-mix(in srgb, var(--accent) 48%, #74e7b0 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, rgba(116,231,176,.06));
+}
+.v2-track-current small, .v2-track-group-title small, .v2-track-search input::placeholder { color: #839c98; }
+
+/* Accueil V2 */
+.today-hero-v2 {
+  border-color: rgba(164,255,211,.12);
+  background:
+    radial-gradient(circle at 50% 26%, color-mix(in srgb, var(--accent) 17%, rgba(116,231,176,.08)), transparent 45%),
+    radial-gradient(circle at 86% 72%, rgba(116,231,176,.09), transparent 28%),
+    linear-gradient(155deg, rgba(16,54,63,.92), rgba(6,24,31,.96));
+  box-shadow: 0 30px 90px rgba(0,0,0,.31), inset 0 1px rgba(255,255,255,.05);
+}
+.today-v2-glow {
+  background: color-mix(in srgb, var(--accent) 24%, #74e7b0 10%, transparent);
+  filter: blur(44px);
+}
+.today-v2-next,
+.today-v2-metrics article,
+.today-v2-quick button {
+  border-color: rgba(184,255,222,.08);
+  background: linear-gradient(145deg, rgba(255,255,255,.038), rgba(116,231,176,.018));
+}
+.today-v2-quick button:hover {
+  border-color: rgba(116,231,176,.23);
+  background: rgba(116,231,176,.055);
+  transform: translateY(-1px);
+}
+.today-v2-quick button > span { background: rgba(116,231,176,.07); }
+.today-v2-presence {
+  border: 1px solid rgba(116,231,176,.10);
+  background: linear-gradient(90deg, rgba(116,231,176,.065), rgba(72,183,174,.035));
+}
+
+/* Navigation */
+.app-view-nav {
+  border-color: rgba(184,255,222,.10);
+  background: rgba(7,26,33,.84);
+  box-shadow: 0 18px 54px rgba(0,0,0,.26), inset 0 1px rgba(255,255,255,.04);
+  backdrop-filter: blur(20px);
+}
+.app-view-nav button { color: #93aaa6; }
+.app-view-nav button:hover { color: #e9f8ef; background: rgba(116,231,176,.045); }
+.app-view-nav button.active {
+  color: #eaffef;
+  background: linear-gradient(145deg, rgba(116,231,176,.12), rgba(61,174,166,.08));
+  box-shadow: inset 0 0 0 1px rgba(116,231,176,.11), 0 9px 28px rgba(0,0,0,.16);
+}
+
+/* Cartes principales */
+.dashboard-card,
+.daily-card,
+.setup-card,
+.rewards-section,
+.program-card,
+.milestones,
+.safety-note,
+.subscriber-banner,
+.billing-alert,
+.journal-section,
+.learning-section,
+.plus-offer {
+  border-color: rgba(184,255,222,.10);
+}
+.dashboard-card {
+  background: linear-gradient(155deg, rgba(14,45,54,.95), rgba(7,27,34,.96));
+  box-shadow: 0 34px 100px rgba(0,0,0,.31), inset 0 1px rgba(255,255,255,.045);
+}
+.presence-card {
+  border-color: rgba(116,231,176,.20);
+  background: linear-gradient(100deg, rgba(116,231,176,.075), rgba(58,162,158,.045));
+}
+.hero-progress {
+  border-color: rgba(164,255,211,.11);
+  background:
+    radial-gradient(circle at 50% 22%, rgba(116,231,176,.20), transparent 17rem),
+    radial-gradient(circle at 70% 70%, rgba(49,176,164,.11), transparent 19rem),
+    linear-gradient(180deg, #0a252d 0%, #071a22 100%);
+  box-shadow: inset 0 1px rgba(255,255,255,.04);
+}
+.hero-progress::after { opacity: .11; }
+.day-count strong {
+  color: #e7ef9b;
+  text-shadow: 0 8px 34px rgba(216,237,138,.15);
+}
+.hero-progress blockquote { color: #ccebdd; }
+.next-step-card {
+  border-color: color-mix(in srgb, var(--accent), #74e7b0 20%, transparent 65%);
+  background: color-mix(in srgb, var(--accent), rgba(116,231,176,.055) 12%, transparent 88%);
+}
+.daily-card,
+.program-card,
+.rewards-section,
+.milestones {
+  background: linear-gradient(155deg, rgba(14,45,54,.88), rgba(7,25,32,.92));
+  box-shadow: 0 22px 70px rgba(0,0,0,.20), inset 0 1px rgba(255,255,255,.035);
+}
+
+/* Boutons et champs */
+.button.primary,
+.save-checkin,
+.plus-offer .primary,
+.agenda-form-actions .primary {
+  border: 0;
+  color: #042018;
+  background: linear-gradient(100deg, #71e7af 0%, #b8ec98 62%, #e4ed9a 100%);
+  box-shadow: 0 12px 34px rgba(89,225,169,.15), inset 0 1px rgba(255,255,255,.38);
+}
+.button.primary:hover,
+.save-checkin:hover { filter: brightness(1.04); transform: translateY(-1px); }
+.button.ghost,
+.checkin-option,
+.share-checkin {
+  border-color: rgba(184,255,222,.09);
+  background: rgba(255,255,255,.025);
+}
+.field input, .field textarea, .field select,
+.pin-field input,
+.agenda-field input, .agenda-field textarea, .agenda-field select {
+  border-color: rgba(184,255,222,.09);
+  background: rgba(2,15,20,.34);
+}
+
+/* Journal / Comprendre */
+.journal-hero,
+.learning-hero,
+.agenda-hero {
+  border-color: rgba(164,255,211,.11);
+  background:
+    radial-gradient(circle at 10% 18%, rgba(116,231,176,.14), transparent 31%),
+    radial-gradient(circle at 88% 72%, rgba(41,170,160,.08), transparent 28%),
+    linear-gradient(150deg, rgba(15,49,58,.92), rgba(7,25,32,.95));
+  box-shadow: 0 26px 80px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.04);
+}
+.journal-orb, .learning-orb, .agenda-orb {
+  background: linear-gradient(145deg, rgba(116,231,176,.15), rgba(54,173,164,.08));
+  box-shadow: inset 0 0 0 1px rgba(116,231,176,.17), 0 16px 38px rgba(0,0,0,.20), 0 0 30px rgba(116,231,176,.05);
+}
+.journal-hero h2 em, .learning-hero h2 em, .agenda-hero h2 em { color: #80e9b9; }
+
+/* Agenda */
+.agenda-stats article,
+.agenda-compose,
+.agenda-upcoming,
+.agenda-item {
+  border-color: rgba(184,255,222,.08);
+  background: linear-gradient(145deg, rgba(255,255,255,.03), rgba(116,231,176,.014));
+}
+.agenda-item-icon, .agenda-stats span { background: rgba(116,231,176,.055); }
+.agenda-privacy {
+  border-color: rgba(116,231,176,.13);
+  background: rgba(116,231,176,.045);
+}
+
+/* ESSOR+ */
+.plus-offer {
+  background:
+    radial-gradient(circle at 18% 10%, rgba(216,237,138,.10), transparent 25rem),
+    radial-gradient(circle at 86% 70%, rgba(116,231,176,.09), transparent 25rem),
+    linear-gradient(155deg, rgba(15,48,56,.97), rgba(6,23,30,.98));
+  box-shadow: 0 34px 100px rgba(0,0,0,.30), inset 0 1px rgba(255,255,255,.04);
+}
+.plus-benefits article,
+.price-card,
+.free-promise {
+  border-color: rgba(184,255,222,.09);
+  background: rgba(255,255,255,.025);
+}
+.price-card.featured {
+  border-color: rgba(216,237,138,.26);
+  background: linear-gradient(150deg, rgba(216,237,138,.065), rgba(116,231,176,.035));
+}
+
+/* Confidentialité / onboarding */
+.privacy-shell {
+  background:
+    radial-gradient(circle at 50% 8%, rgba(116,231,176,.15), transparent 28rem),
+    radial-gradient(circle at 15% 90%, rgba(51,171,163,.10), transparent 28rem),
+    #06151d;
+}
+.lock-card, .onboarding-card {
+  border-color: rgba(184,255,222,.10);
+  background: linear-gradient(150deg, rgba(16,53,62,.98), rgba(6,24,31,.99));
+  box-shadow: 0 40px 120px rgba(0,0,0,.38), inset 0 1px rgba(255,255,255,.045);
+}
+
+@media (max-width: 760px) {
+  body {
+    background:
+      radial-gradient(circle at 90% 1%, rgba(116,231,176,.085), transparent 20rem),
+      linear-gradient(180deg, #05131b, #071b22 55%, #06151d);
+  }
+  .topbar { width: 100%; height: 68px; padding-inline: 13px; }
+  .intro { margin-top: 34px; }
+  .today-hero-v2 { border-radius: 24px; }
+  .app-view-nav {
+    background: rgba(5,22,28,.965) !important;
+    border-top-color: rgba(164,255,211,.10) !important;
+    box-shadow: 0 -16px 45px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.035) !important;
+  }
+  .dashboard-card,
+  .daily-card,
+  .program-card,
+  .rewards-section,
+  .agenda-compose,
+  .agenda-upcoming { box-shadow: 0 16px 48px rgba(0,0,0,.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .today-v2-quick button,
+  .button.primary,
+  .save-checkin { transition: none !important; transform: none !important; }
+}
