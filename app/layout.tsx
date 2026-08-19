@@ -6,6 +6,7 @@ import "./agenda.css";
 import "./growth-v3.css";
 import "./visual-refresh.css";
 import "./visual-refresh-plus.css";
+import "./visual-refresh-release.css";
 
 const fredoka = Fredoka({ variable: "--font-display", subsets: ["latin"] });
 const plexSans = IBM_Plex_Sans({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
@@ -16,14 +17,14 @@ export const metadata: Metadata = {
   description: "Un compagnon pour reprendre le contrôle d’une dépendance, d’une compulsion ou d’une habitude, un jour après l’autre.",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
-  other: { "codex-preview": "development" },
+  other: { "codex-preview": "development", "essor-visual-release": "store-2026-08-19" },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#06151d",
+  themeColor: "#03151c",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
