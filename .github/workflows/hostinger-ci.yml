@@ -86,6 +86,7 @@ jobs:
             exit 0
           fi
           git commit -m "Synchronise package-lock pour Hostinger"
+          git reset --hard HEAD
           git pull --rebase origin hostinger-migration
           git push origin HEAD:hostinger-migration
 
@@ -110,5 +111,6 @@ jobs:
             exit 0
           fi
           git commit -m "Enregistre le dernier build Hostinger ESSOR"
+          git reset --hard HEAD
           git pull --rebase origin hostinger-migration
           git push origin HEAD:hostinger-migration
