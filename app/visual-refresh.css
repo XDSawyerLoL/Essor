@@ -100,7 +100,7 @@ body {
 }
 .v2-track-option:hover { border-color: rgba(116,231,176,.20); background: rgba(116,231,176,.045); }
 .v2-track-option.active {
-  border-color: color-mix(in srgb, var(--accent) 48%, #74e7b0 30%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 55%, #74e7b0 45%);
   background: color-mix(in srgb, var(--accent) 8%, rgba(116,231,176,.06));
 }
 .v2-track-current small, .v2-track-group-title small, .v2-track-search input::placeholder { color: #839c98; }
@@ -115,8 +115,9 @@ body {
   box-shadow: 0 30px 90px rgba(0,0,0,.31), inset 0 1px rgba(255,255,255,.05);
 }
 .today-v2-glow {
-  background: color-mix(in srgb, var(--accent) 24%, #74e7b0 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 70%, #74e7b0 30%);
   filter: blur(44px);
+  opacity: .28;
 }
 .today-v2-next,
 .today-v2-metrics article,
@@ -188,8 +189,8 @@ body {
 }
 .hero-progress blockquote { color: #ccebdd; }
 .next-step-card {
-  border-color: color-mix(in srgb, var(--accent), #74e7b0 20%, transparent 65%);
-  background: color-mix(in srgb, var(--accent), rgba(116,231,176,.055) 12%, transparent 88%);
+  border-color: color-mix(in srgb, var(--accent) 55%, #74e7b0 45%);
+  background: color-mix(in srgb, var(--accent) 8%, rgba(116,231,176,.055));
 }
 .daily-card,
 .program-card,
