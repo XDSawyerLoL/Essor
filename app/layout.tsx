@@ -7,6 +7,7 @@ import "./growth-v3.css";
 import "./visual-refresh.css";
 import "./visual-refresh-plus.css";
 import "./visual-refresh-release.css";
+import "./store-alignment.css";
 
 const fredoka = Fredoka({ variable: "--font-display", subsets: ["latin"] });
 const plexSans = IBM_Plex_Sans({ variable: "--font-body", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
@@ -30,7 +31,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body className={`${fredoka.variable} ${plexSans.variable} ${plexMono.variable}`}>{children}</body>
+      <body className={`${fredoka.variable} ${plexSans.variable} ${plexMono.variable}`}>
+        <script src="/founder-access.js" defer />
+        {children}
+      </body>
     </html>
   );
 }
