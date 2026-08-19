@@ -9,7 +9,7 @@ on:
       - ".github/workflows/android-build.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Récupérer le projet
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Installer Java 17
         uses: actions/setup-java@v4
@@ -115,3 +117,31 @@ jobs:
           path: |
             android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Enregistrer le statut du build Android
+        if: ${{ always() }}
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          BUILD_STATUS: ${{ job.status }}
+          SIGNING_READY: ${{ steps.signing.outputs.ready }}
+        run: |
+          set -euo pipefail
+          mkdir -p .github/build-meta
+          cat > .github/build-meta/android-last-build.txt <<EOF
+          run_id=$RUN_ID
+          head_sha=$HEAD_SHA
+          status=$BUILD_STATUS
+          signing_ready=${SIGNING_READY:-unknown}
+          version=1.3.0
+          version_code=4
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/build-meta/android-last-build.txt
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Enregistre le dernier build Android ESSOR"
+          git pull --rebase origin hostinger-migration
+          git push origin HEAD:hostinger-migration
