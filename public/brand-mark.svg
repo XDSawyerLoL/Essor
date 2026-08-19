@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Symbole ESSOR">
+  <defs>
+    <linearGradient id="leaf" x1="12" y1="8" x2="82" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4fff7"/>
+      <stop offset=".34" stop-color="#a8efb8"/>
+      <stop offset=".68" stop-color="#55dca8"/>
+      <stop offset="1" stop-color="#149b91"/>
+    </linearGradient>
+    <linearGradient id="path" x1="28" y1="22" x2="71" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6f58d"/>
+      <stop offset=".45" stop-color="#7be7b3"/>
+      <stop offset="1" stop-color="#0f7d78"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="34%" r="66%">
+      <stop offset="0" stop-color="#86edb9" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#86edb9" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="48" cy="48" r="43" fill="url(#halo)"/>
+  <path d="M47 43C35 49 30 59 34 68c4 9 15 12 23 18-5-8-6-14-2-20 4-7 13-11 16-19 3-8-1-15-8-21 3 10 1 17-5 23-5 5-11 8-13 14-2 5 0 10 2 14-7-5-11-10-10-16 1-7 6-12 10-18z" fill="url(#path)" filter="url(#glow)"/>
+  <path d="M46 34C34 33 27 27 27 17c10 0 18 4 22 13-1 1-2 2-3 4z" fill="url(#leaf)"/>
+  <path d="M51 31C55 19 63 13 75 13c0 12-7 21-20 24-1-2-2-4-4-6z" fill="url(#leaf)"/>
+  <path d="M48 31c1 7 0 14-4 20" fill="none" stroke="#effff5" stroke-opacity=".72" stroke-width="2" stroke-linecap="round"/>
+</svg>
