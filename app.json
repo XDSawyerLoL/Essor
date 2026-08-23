@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Atlas",
+    "slug": "project-atlas",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "com.projectatlas.app",
+      "edgeToEdgeEnabled": true
+    }
+  }
+}
