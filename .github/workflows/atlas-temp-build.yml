@@ -1,19 +1,25 @@
 name: Temporary Atlas APK Build
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches: [atlas-build-20260823]
+    paths-ignore:
+      - 'ci-output/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout Atlas PR
+      - name: Checkout Atlas branch
         uses: actions/checkout@v4
+        with:
+          ref: atlas-build-20260823
+          fetch-depth: 0
       - name: Node 20
         uses: actions/setup-node@v4
         with:
@@ -23,21 +29,36 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Generate Android project
-        run: npx expo prebuild --platform android --non-interactive
-      - name: Build APK
+      - name: Build and publish result to branch
+        shell: bash
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
-      - name: Prepare APK
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk Atlas-V0.apk
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Atlas-V0-APK
-          path: Atlas-V0.apk
-          retention-days: 7
-          if-no-files-found: error
+          set +e
+          rm -rf ci-output android node_modules
+          mkdir -p ci-output
+          LOG=/tmp/atlas-build.log
+          : > "$LOG"
+          STATUS=0
+
+          npm install --no-audit --no-fund >> "$LOG" 2>&1 || STATUS=$?
+          if [ "$STATUS" -eq 0 ]; then
+            npx expo prebuild --platform android --non-interactive >> "$LOG" 2>&1 || STATUS=$?
+          fi
+          if [ "$STATUS" -eq 0 ]; then
+            chmod +x android/gradlew
+            (cd android && ./gradlew assembleDebug --no-daemon --stacktrace) >> "$LOG" 2>&1 || STATUS=$?
+          fi
+
+          if [ "$STATUS" -eq 0 ] && [ -f android/app/build/outputs/apk/debug/app-debug.apk ]; then
+            base64 -w 0 android/app/build/outputs/apk/debug/app-debug.apk > ci-output/Atlas-V0.apk.b64
+            echo success > ci-output/status.txt
+          else
+            echo failed > ci-output/status.txt
+            echo "exit_code=$STATUS" >> ci-output/status.txt
+          fi
+
+          tail -n 500 "$LOG" > ci-output/build-tail.txt
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add ci-output
+          git commit -m "ci: publish Atlas APK result" || true
+          git push origin HEAD:atlas-build-20260823
