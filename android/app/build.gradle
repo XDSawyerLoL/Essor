@@ -39,17 +39,9 @@ def twaManifest = [
     navigationDividerColorDark: '#000000', // The dark navbar divider color.
     backgroundColor: '#15131D', // The color used for the splash screen background.
     enableNotifications: true, // Set to true to enable notification delegation.
-    // Every shortcut must include the following fields:
-    // - name: String that will show up in the shortcut.
-    // - short_name: Shorter string used if |name| is too long.
-    // - url: Absolute path of the URL to launch the app with (e.g '/create').
-    // - icon: Name of the resource in the drawable folder to use as an icon.
     shortcuts: [],
-    // The duration of fade out animation in milliseconds to be played when removing splash screen.
     splashScreenFadeOutDuration: 300,
-    generatorApp: 'bubblewrap-cli', // Application that generated the Android Project
-    // The fallback strategy for when Trusted Web Activity is not available. Possible values are
-    // 'customtabs' and 'webview'.
+    generatorApp: 'bubblewrap-cli',
     fallbackType: 'customtabs',
     enableSiteSettingsShortcut: 'true',
     orientation: 'portrait',
@@ -66,26 +58,14 @@ android {
         versionCode 5
         versionName "1.3.1"
 
-        // The name for the application
         resValue "string", "appName", twaManifest.name
-
-        // The name shown on the Android Launcher
         resValue "string", "launcherName", twaManifest.launcherName
 
-        // The URL that will be used when launching the TWA from the Android Launcher
         def launchUrl = "https://" + twaManifest.hostName + twaManifest.launchUrl
         resValue "string", "launchUrl", launchUrl
-
-        // The URL the Web Manifest for the Progressive Web App that the TWA points to.
         resValue "string", "webManifestUrl", 'https://essor-app.valentin88hernandez.chatgpt.site/manifest.webmanifest'
-
-        // This is used by Meta Quest.
         resValue "string", "fullScopeUrl", 'https://essor-app.valentin88hernandez.chatgpt.site/'
-
-        // The hostname is used when building the intent-filter, so the TWA is able to
-        // handle Intents to open host url of the application.
         resValue "string", "hostName", twaManifest.hostName
-
         resValue "color", "colorPrimary", twaManifest.themeColor
         resValue "color", "colorPrimaryDark", twaManifest.themeColorDark
         resValue "color", "navigationColor", twaManifest.navigationColor
@@ -107,6 +87,7 @@ android {
         resValue "bool", "enableSiteSettingsShortcut", twaManifest.enableSiteSettingsShortcut
         resValue "string", "orientation", twaManifest.orientation
     }
+
     signingConfigs {
         if (signingKeystore && signingStorePassword && signingKeyAlias && signingKeyPassword) {
             release {
@@ -117,6 +98,7 @@ android {
             }
         }
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -125,10 +107,12 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         checkReleaseBuilds false
     }
@@ -144,7 +128,6 @@ task generateShorcutsFile {
     }
 
     def shortcutsFile = new File("$projectDir/src/main/res/xml", "shortcuts.xml")
-
     def xmlWriter = new StringWriter()
     def xmlMarkup = new MarkupBuilder(new IndentPrinter(xmlWriter, "    ", true))
 
@@ -164,7 +147,9 @@ task generateShorcutsFile {
                             'android:data': s.url)
                     'categories'('android:name': 'android.intent.category.LAUNCHER')
                 }
+            }
         }
+
     shortcutsFile.text = xmlWriter.toString() + '\n'
 }
 
